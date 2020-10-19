@@ -1,10 +1,10 @@
 // File: RedBlackTree.cpp
-// Version: V1.1 
+// Version: V1.1
 // Date: 04/04/2012
-// Name: Daniel Clarke - Computer Science 
+// Name: Daniel Clarke - Computer Science
 // ID: n0271538
 // This program contains functions which manipulate the pointers used in the Red Black Tree, it also contains the implementation functions for tree balancing.
-// Modification history: 
+// Modification history:
 // V1.1 4/4/2012
 
 #include "stdafx.h"
@@ -24,58 +24,58 @@ binaryTree::binaryTree()
 	_root = NULL;
 	_foundFlag = false;
 }
-void binaryTree::insert(int keyGen, std::string vesselName, BaseVessel* vesselPtr)
+void binaryTree::insert(int keyGen, std::string vesselName, BaseVessel *vesselPtr)
 {
-	if(_root != NULL)
+	if (_root != NULL)
 		insertNode(findRoot(_root), keyGen, vesselName, vesselPtr);
 	else
 	{
 		_root = new Node;
-		_root->setKey(keyGen);  //set node key
+		_root->setKey(keyGen);			  //set node key
 		_root->setVesselName(vesselName); //for searching by name
-		_root->setVesselPtr(vesselPtr); //set node data
+		_root->setVesselPtr(vesselPtr);	  //set node data
 		_root->setNextLeft(NULL);
 		_root->setNextRight(NULL);
 		_root->setParent(NULL);
 		_element++;
-	}		
+	}
 }
-void binaryTree::insertNode(Node* node, int keyGen, std::string vesselName, BaseVessel* vesselPtr)
+void binaryTree::insertNode(Node *node, int keyGen, std::string vesselName, BaseVessel *vesselPtr)
 {
 	// to set parent so node can look back to its parent node
-	Node* parent;
+	Node *parent;
 
 	parent = node;
-	
-	if((keyGen == node->getKey()) || (vesselName == node->getVesselName()))
+
+	if ((keyGen == node->getKey()) || (vesselName == node->getVesselName()))
 		throw exception(DUPLICATE);
-	
-	if(node->getKey() > keyGen)//compare key in tree
+
+	if (node->getKey() > keyGen) //compare key in tree
 	{
-		if(node->getNextLeft() != NULL)
+		if (node->getNextLeft() != NULL)
 			insertNode(node->getNextLeft(), keyGen, vesselName, vesselPtr);
 		else
-		{			
+		{
 			node->setNextLeft(new Node);
-			node->getNextLeft()->setKey(keyGen); //set node key
+			node->getNextLeft()->setKey(keyGen);			//set node key
 			node->getNextLeft()->setVesselName(vesselName); //for searching by name
-			node->getNextLeft()->setVesselPtr(vesselPtr); //set node data
+			node->getNextLeft()->setVesselPtr(vesselPtr);	//set node data
 			node->getNextLeft()->setNextLeft(NULL);
 			node->getNextLeft()->setNextRight(NULL);
 			node->getNextLeft()->setParent(parent);
 			_element++;
 		}
 	}
-	else if(keyGen > node->getKey())
+	else if (keyGen > node->getKey())
 	{
-		if(node->getNextRight() != NULL)
+		if (node->getNextRight() != NULL)
 			insertNode(node->getNextRight(), keyGen, vesselName, vesselPtr);
 		else
 		{
 			node->setNextRight(new Node);
-			node->getNextRight()->setKey(keyGen); //set node key
+			node->getNextRight()->setKey(keyGen);			 //set node key
 			node->getNextRight()->setVesselName(vesselName); //for searching by name
-			node->getNextRight()->setVesselPtr(vesselPtr); //set node data
+			node->getNextRight()->setVesselPtr(vesselPtr);	 //set node data
 			node->getNextRight()->setNextLeft(NULL);
 			node->getNextRight()->setNextRight(NULL);
 			node->getNextRight()->setParent(parent);
@@ -83,7 +83,7 @@ void binaryTree::insertNode(Node* node, int keyGen, std::string vesselName, Base
 		}
 	}
 
-	insertCase1(node);// get the red black rolling on node inserted to tree
+	insertCase1(node); // get the red black rolling on node inserted to tree
 }
 void binaryTree::editNode(int key)
 {
@@ -97,31 +97,31 @@ void binaryTree::editNodeName(int key)
 }
 int binaryTree::size()
 {
-	if(_element != 0)
+	if (_element != 0)
 		return _element;
 	else
 		throw exception(ERRORMSG);
 }
-Node* binaryTree::find(Node* node, int idFind)
-{	
-	if(node == NULL)
+Node *binaryTree::find(Node *node, int idFind)
+{
+	if (node == NULL)
 		throw exception(UNFOUND);
 
-	if(node->getKey() == idFind)
+	if (node->getKey() == idFind)
 		return node;
 	else
 	{
-		if(node->getKey() < idFind)
+		if (node->getKey() < idFind)
 			return find(node->getNextRight(), idFind);
 		else
 			return find(node->getNextLeft(), idFind);
 	}
 }
-Node* binaryTree::findClosestMatch(Node *node, int idFind)
+Node *binaryTree::findClosestMatch(Node *node, int idFind)
 {
-	if(node == NULL)
+	if (node == NULL)
 	{
-		if(_closestNode != NULL)
+		if (_closestNode != NULL)
 		{
 			stream.Percent(_closestNode, _percentage);
 			_max = 0;
@@ -130,18 +130,18 @@ Node* binaryTree::findClosestMatch(Node *node, int idFind)
 		throw exception(CLOSEST);
 	}
 
-	if(node->getKey() == idFind)
+	if (node->getKey() == idFind)
 		return node;
 	else
 	{
-		if(node->getKey() < idFind)
+		if (node->getKey() < idFind)
 		{
-			_percentageP1 = (double)node->getKey()/(double)idFind;
-			_percentage = _percentageP1*100;
+			_percentageP1 = (double)node->getKey() / (double)idFind;
+			_percentage = _percentageP1 * 100;
 
-			if( _percentage > _max)
+			if (_percentage > _max)
 			{
-				_max =  _percentage;
+				_max = _percentage;
 				_closestNode = node;
 			}
 
@@ -149,12 +149,12 @@ Node* binaryTree::findClosestMatch(Node *node, int idFind)
 		}
 		else
 		{
-			_percentageP1 = (double)idFind/(double)node->getKey();
-			_percentage = _percentageP1*100;
-			
-			if( _percentage > _max)
+			_percentageP1 = (double)idFind / (double)node->getKey();
+			_percentage = _percentageP1 * 100;
+
+			if (_percentage > _max)
 			{
-				_max =  _percentage;
+				_max = _percentage;
 				_closestNode = node;
 			}
 
@@ -162,13 +162,13 @@ Node* binaryTree::findClosestMatch(Node *node, int idFind)
 		}
 	}
 }
-Node* binaryTree::findByName(Node *node, std::string findName)
+Node *binaryTree::findByName(Node *node, std::string findName)
 {
-	if(_root != NULL)
+	if (_root != NULL)
 	{
-		if(node != NULL)
+		if (node != NULL)
 		{
-			if(node->getVesselName() == findName)
+			if (node->getVesselName() == findName)
 			{
 				stream.streamOut(node->getKey(), node->getVesselName(), node->getVesselPtr());
 				_foundFlag = true;
@@ -179,13 +179,13 @@ Node* binaryTree::findByName(Node *node, std::string findName)
 	}
 	else
 		throw exception(ERRORMSG);
-		//sort of an augmented noOrder traversal method
+	//sort of an augmented noOrder traversal method
 }
-void binaryTree::inOrderPrint(Node* node)
+void binaryTree::inOrderPrint(Node *node)
 {
-	if(_root != NULL) 
+	if (_root != NULL)
 	{
-		if(node != NULL)
+		if (node != NULL)
 		{
 			inOrderPrint(node->getNextLeft());
 			stream.streamOut(node->getKey(), node->getVesselName(), node->getVesselPtr());
@@ -194,13 +194,12 @@ void binaryTree::inOrderPrint(Node* node)
 	}
 	else
 		throw exception(ERRORMSG);
-
 }
-void binaryTree::postOrderPrint(Node* node)
+void binaryTree::postOrderPrint(Node *node)
 {
-	if(_root != NULL) 
+	if (_root != NULL)
 	{
-		if(node != NULL)
+		if (node != NULL)
 		{
 			postOrderPrint(node->getNextRight());
 			stream.streamOut(node->getKey(), node->getVesselName(), node->getVesselPtr());
@@ -210,11 +209,11 @@ void binaryTree::postOrderPrint(Node* node)
 	else
 		throw exception(ERRORMSG);
 }
-void binaryTree::noOrderPrint(Node* node)
+void binaryTree::noOrderPrint(Node *node)
 {
-	if(_root != NULL) 
+	if (_root != NULL)
 	{
-		if(node != NULL)
+		if (node != NULL)
 		{
 			stream.streamOut(node->getKey(), node->getVesselName(), node->getVesselPtr());
 			noOrderPrint(node->getNextLeft());
@@ -226,13 +225,13 @@ void binaryTree::noOrderPrint(Node* node)
 }
 void binaryTree::publicPrint(int printSelect)
 {
-	Node* rootNode = findRoot(_root);
+	Node *rootNode = findRoot(_root);
 
-	if(printSelect == 1)
+	if (printSelect == 1)
 		inOrderPrint(rootNode);
-	else if(printSelect == 2)
+	else if (printSelect == 2)
 		postOrderPrint(rootNode);
-	else if(printSelect == 3)
+	else if (printSelect == 3)
 		noOrderPrint(rootNode);
 }
 void binaryTree::FindVesselID(int idFind)
@@ -244,9 +243,9 @@ void binaryTree::findVesselName(std::string findName)
 {
 	Node *_p = findByName(findRoot(_root), findName);
 
-	if((_p == NULL) && (_foundFlag == false)) // _p will be returned as NULL because of recursion
+	if ((_p == NULL) && (_foundFlag == false)) // _p will be returned as NULL because of recursion
 		throw exception(UNFOUND);
-	if((_p == NULL) && (_foundFlag == true))
+	if ((_p == NULL) && (_foundFlag == true))
 		_foundFlag = false;
 }
 void binaryTree::hydrophone(int idFind)
@@ -254,13 +253,13 @@ void binaryTree::hydrophone(int idFind)
 	Node *_p = findClosestMatch(findRoot(_root), idFind);
 	stream.streamOut(_p->getKey(), _p->getVesselName(), _p->getVesselPtr()); //to catch if the hydrophone hits the nail on the head
 }
-Node* binaryTree::sucessor(Node* node)
+Node *binaryTree::sucessor(Node *node)
 {
 	Node *temp, *temp2;
 
 	temp = temp2 = node->getNextRight();
 
-	while(temp != NULL)
+	while (temp != NULL)
 	{
 		temp2 = temp;
 		temp = temp->getNextLeft();
@@ -270,52 +269,50 @@ Node* binaryTree::sucessor(Node* node)
 }
 void binaryTree::deleteCurrent(int selectID)
 {
-	Node* node;
+	Node *node;
 	Node *y;
-	Node *sucessorTemp;//for both children
+	Node *sucessorTemp; //for both children
 
 	//need to start with a search so
 	node = find(findRoot(_root), selectID);
-	Node* rootNode = findRoot(node);
+	Node *rootNode = findRoot(node);
 
-	if(node->getKey() == selectID)
+	if (node->getKey() == selectID)
 	{
-		if((node->getNextLeft() == NULL) && (node->getNextRight() == NULL))	//when node is a leaf only
+		if ((node->getNextLeft() == NULL) && (node->getNextRight() == NULL)) //when node is a leaf only
 		{
 			y = node->getParent();
 
-			if(node->getParent() == NULL)
+			if (node->getParent() == NULL)
 			{
 				rootNode = NULL;
 				_element--;
 				delete node;
 				throw exception(EMPTY); // might aswell jump out now :P
 			}
-			if(node == (node->getParent()->getNextRight()))
+			if (node == (node->getParent()->getNextRight()))
 				y->setNextRight(NULL);
 			else
 				y->setNextLeft(NULL);
-
 		}
-		else if((node->getNextLeft() != NULL) && (node->getNextRight() == NULL)) //when a node has left only
+		else if ((node->getNextLeft() != NULL) && (node->getNextRight() == NULL)) //when a node has left only
 		{
-			if(node->getParent() == NULL)
+			if (node->getParent() == NULL)
 			{
-		
+
 				node->getNextLeft()->setParent(node->getNextLeft());
 				y = node->getNextLeft()->getParent();
 				y->setNextLeft(y->getNextLeft());
 				y->setParent(NULL);
 
 				rootNode = y;
-
 			}
-			else if(node == (node->getParent()->getNextLeft()))
+			else if (node == (node->getParent()->getNextLeft()))
 			{
 				y = node->getParent();
 
 				node->getNextLeft()->setParent(y);
-				y->setNextLeft(node->getNextLeft()); 
+				y->setNextLeft(node->getNextLeft());
 			}
 			else
 			{
@@ -324,35 +321,33 @@ void binaryTree::deleteCurrent(int selectID)
 				node->getNextLeft()->setParent(y);
 				y->setNextRight(node->getNextLeft());
 			}
-			
+
 			//starting balancing
-			if(node->getColour() == false)
+			if (node->getColour() == false)
 			{
-				if(node->getNextLeft()->getColour() == true)
+				if (node->getNextLeft()->getColour() == true)
 					node->getNextLeft()->setColour(false);
 				else
-				deleteCase1(node->getNextLeft());
+					deleteCase1(node->getNextLeft());
 			}
-				
 		}
-		else if((node->getNextRight() != NULL) && (node->getNextLeft() == NULL)) //when a node has right only
+		else if ((node->getNextRight() != NULL) && (node->getNextLeft() == NULL)) //when a node has right only
 		{
-			if(node->getParent() == NULL)
+			if (node->getParent() == NULL)
 			{
-		
+
 				node->getNextRight()->setParent(node->getNextRight());
 				y = node->getNextRight()->getParent();
 				y->setNextRight(y->getNextRight());
 				y->setParent(NULL);
-		
-				rootNode = y;		
+
+				rootNode = y;
 			}
-			else if(node == (node->getParent()->getNextLeft()))
+			else if (node == (node->getParent()->getNextLeft()))
 			{
 				y = node->getParent();
 				node->getNextRight()->setParent(y);
 				y->setNextLeft(node->getNextRight());
-
 			}
 			else
 			{
@@ -360,31 +355,30 @@ void binaryTree::deleteCurrent(int selectID)
 				node->getNextRight()->setParent(y);
 				y->setNextRight(node->getNextRight());
 			}
-			
+
 			//starting balancing
-			if(node->getColour() == false)
+			if (node->getColour() == false)
 			{
-				if(node->getNextRight()->getColour() == true)
+				if (node->getNextRight()->getColour() == true)
 					node->getNextRight()->setColour(false);
 				else
-				deleteCase1(node->getNextRight());
+					deleteCase1(node->getNextRight());
 			}
 		}
-		else if((node->getNextLeft() != NULL) && (node->getNextRight() != NULL)) //when node has both left and right
-		{	 //internal node//
-			if(node->getParent() == NULL)// fixed
-			{	
+		else if ((node->getNextLeft() != NULL) && (node->getNextRight() != NULL)) //when node has both left and right
+		{																		  //internal node//
+			if (node->getParent() == NULL)										  // fixed
+			{
 				sucessorTemp = sucessor(node);
 
-				if(sucessorTemp != node->getNextRight())
+				if (sucessorTemp != node->getNextRight())
 				{
 					y = sucessorTemp->getParent();
 
-					if(sucessorTemp->getNextRight() != NULL)
+					if (sucessorTemp->getNextRight() != NULL)
 					{
 						sucessorTemp->getNextRight()->setParent(y);
 						y->setNextLeft(sucessorTemp->getNextRight());
-
 					}
 					else
 						y->setNextLeft(NULL);
@@ -407,14 +401,14 @@ void binaryTree::deleteCurrent(int selectID)
 
 				rootNode = sucessorTemp;
 			}
-			if(node == (node->getParent()->getNextLeft())) //left side first
+			if (node == (node->getParent()->getNextLeft())) //left side first
 			{
 				sucessorTemp = sucessor(node);
-				if(sucessorTemp != node->getNextRight())
+				if (sucessorTemp != node->getNextRight())
 				{
 					y = sucessorTemp->getParent();
 
-					if(sucessorTemp->getNextRight() != NULL)
+					if (sucessorTemp->getNextRight() != NULL)
 					{
 						sucessorTemp->getNextRight()->setParent(y);
 						y->setNextLeft(sucessorTemp->getNextRight());
@@ -442,15 +436,15 @@ void binaryTree::deleteCurrent(int selectID)
 					node->getParent()->setNextLeft(sucessorTemp);
 				}
 			}
-			else if(node == (node->getParent()->getNextRight())) //now for the righthand side..
+			else if (node == (node->getParent()->getNextRight())) //now for the righthand side..
 			{
 				sucessorTemp = sucessor(node);
 
-				if(sucessorTemp != node->getNextRight())
+				if (sucessorTemp != node->getNextRight())
 				{
 					y = sucessorTemp->getParent();
 
-					if(sucessorTemp->getNextRight() != NULL)
+					if (sucessorTemp->getNextRight() != NULL)
 					{
 						sucessorTemp->getNextRight()->setParent(y);
 						y->setNextLeft(sucessorTemp->getNextRight());
@@ -476,13 +470,12 @@ void binaryTree::deleteCurrent(int selectID)
 					node->getParent()->setNextRight(sucessorTemp);
 				}
 			}
-				//cannot balance internal nodes
-			}
+			//cannot balance internal nodes
+		}
 
 		_element--;
-	
+
 		delete node;
-			
 	}
 }
 void binaryTree::deletePublic(int selectID)
@@ -490,47 +483,47 @@ void binaryTree::deletePublic(int selectID)
 	deleteCurrent(selectID);
 }
 //red black Implementations
-Node* binaryTree::grandParent(Node *node)
+Node *binaryTree::grandParent(Node *node)
 {
-	if((node != NULL) && (node->getParent() != NULL))
+	if ((node != NULL) && (node->getParent() != NULL))
 		return node->getParent()->getParent();
 	else
 		return node = NULL;
 }
-Node* binaryTree::uncleNode(Node *node)
+Node *binaryTree::uncleNode(Node *node)
 {
-	Node* gpNode = grandParent(node);
-	
-	if(gpNode == NULL)
+	Node *gpNode = grandParent(node);
+
+	if (gpNode == NULL)
 		return NULL; // no grandParent therefore parent is root
-	if(node->getParent() == gpNode->getNextLeft())
+	if (node->getParent() == gpNode->getNextLeft())
 		return gpNode->getNextRight();
 	else
 		return gpNode->getNextLeft();
 }
-void binaryTree::insertCase1(Node* node)
+void binaryTree::insertCase1(Node *node)
 {
-	if(node->getParent() == NULL)
+	if (node->getParent() == NULL)
 		node->setColour(false); //black
 	else
 		insertCase2(node);
 }
 void binaryTree::insertCase2(Node *node)
 {
-	if(node->getParent()->getColour() == false)
+	if (node->getParent()->getColour() == false)
 		return; /* tree's all cool yo */
 	else
 		insertCase3(node);
 }
-void binaryTree::insertCase3(Node* node)
+void binaryTree::insertCase3(Node *node)
 {
-	Node* uNode = uncleNode(node);
-	Node* gpNode;
+	Node *uNode = uncleNode(node);
+	Node *gpNode;
 
-	if((uNode != NULL) && (uNode->getColour() == true))
+	if ((uNode != NULL) && (uNode->getColour() == true))
 	{
 		node->getParent()->setColour(false); //black
-		uNode->setColour(false); // black
+		uNode->setColour(false);			 // black
 		gpNode = grandParent(node);
 		gpNode->setColour(true); //red
 		insertCase1(gpNode);
@@ -540,9 +533,9 @@ void binaryTree::insertCase3(Node* node)
 }
 void binaryTree::insertCase4(Node *node)
 {
-	Node* gpNode = grandParent(node);
+	Node *gpNode = grandParent(node);
 
-	if((node == node->getParent()->getNextRight()) && (node->getParent() == gpNode->getNextLeft()))
+	if ((node == node->getParent()->getNextRight()) && (node->getParent() == gpNode->getNextLeft()))
 	{
 		rotateLeft(node->getParent());
 		node = node->getNextLeft();
@@ -556,12 +549,12 @@ void binaryTree::insertCase4(Node *node)
 }
 void binaryTree::insertCase5(Node *node)
 {
-	Node* gpNode = grandParent(node);
+	Node *gpNode = grandParent(node);
 
 	node->getParent()->setColour(false); //black
-	gpNode->setColour(true); // red
-	
-	if(node == node->getParent()->getNextLeft())
+	gpNode->setColour(true);			 // red
+
+	if (node == node->getParent()->getNextLeft())
 		rotateRight(gpNode);
 	else
 		rotateLeft(gpNode);
@@ -569,20 +562,20 @@ void binaryTree::insertCase5(Node *node)
 //rotation algorithms
 void binaryTree::rotateLeft(Node *node)
 {
-	Node* rotateRootNode;
-	
+	Node *rotateRootNode;
+
 	rotateRootNode = node->getNextRight();
 	node->setNextRight(rotateRootNode->getNextLeft());
 
-	if(rotateRootNode->getNextLeft() != NULL)
+	if (rotateRootNode->getNextLeft() != NULL)
 		rotateRootNode->getNextLeft()->setParent(node);
 
-	if(node->getParent() != NULL)
+	if (node->getParent() != NULL)
 		rotateRootNode->setParent(node->getParent());
 	else
 		rotateRootNode->setParent(NULL);
 
-	if(node->getParent() == NULL)
+	if (node->getParent() == NULL)
 		node->setParent(rotateRootNode); //check for root
 	else if (node == node->getParent()->getNextLeft())
 		node->getParent()->setNextLeft(rotateRootNode);
@@ -592,24 +585,24 @@ void binaryTree::rotateLeft(Node *node)
 	rotateRootNode->setNextLeft(node);
 	node->setParent(rotateRootNode);
 }
-void binaryTree::rotateRight(Node* rotateRootNode)
+void binaryTree::rotateRight(Node *rotateRootNode)
 {
-	Node* node;
+	Node *node;
 
 	node = rotateRootNode->getNextLeft();
 	rotateRootNode->setNextLeft(node->getNextRight());
 
-	if(node->getNextRight() != NULL)
+	if (node->getNextRight() != NULL)
 		node->getNextRight()->setParent(rotateRootNode);
-	
-	if(rotateRootNode->getParent() != NULL)
+
+	if (rotateRootNode->getParent() != NULL)
 		node->setParent(rotateRootNode->getParent());
 	else
 		node->setParent(NULL);
 
-	if(rotateRootNode->getParent() == NULL)
+	if (rotateRootNode->getParent() == NULL)
 		rotateRootNode->setParent(node); //check for root
-	if(rotateRootNode == rotateRootNode->getParent()->getNextLeft())
+	if (rotateRootNode == rotateRootNode->getParent()->getNextLeft())
 		rotateRootNode->getParent()->setNextLeft(node);
 	else
 		rotateRootNode->getParent()->setNextRight(node);
@@ -617,28 +610,28 @@ void binaryTree::rotateRight(Node* rotateRootNode)
 	node->setNextRight(rotateRootNode);
 	rotateRootNode->setParent(node);
 }
-Node* binaryTree::siblingNode(Node *node)
+Node *binaryTree::siblingNode(Node *node)
 {
-	if(node == node->getParent()->getNextLeft())
+	if (node == node->getParent()->getNextLeft())
 		return node->getParent()->getNextRight();
 	else
 		return node->getParent()->getNextLeft();
 }
 void binaryTree::deleteCase1(Node *node)
 {
-	if(node->getParent() != NULL)
+	if (node->getParent() != NULL)
 		deleteCase2(node);
 }
-void binaryTree::deleteCase2(Node* node)
+void binaryTree::deleteCase2(Node *node)
 {
-	Node* sibNode = siblingNode(node);
+	Node *sibNode = siblingNode(node);
 
-	if(sibNode->getColour() == true) //if red
+	if (sibNode->getColour() == true) //if red
 	{
 		node->getParent()->setColour(true); //is now red
-		sibNode->setColour(false); //is not black
+		sibNode->setColour(false);			//is not black
 
-		if(node == node->getParent()->getNextLeft())
+		if (node == node->getParent()->getNextLeft())
 			rotateLeft(node->getParent());
 		else
 			rotateRight(node->getParent());
@@ -646,12 +639,11 @@ void binaryTree::deleteCase2(Node* node)
 
 	deleteCase3(node);
 }
-void binaryTree::deleteCase3(Node* node)
+void binaryTree::deleteCase3(Node *node)
 {
-	Node* sibNode = siblingNode(node);
+	Node *sibNode = siblingNode(node);
 
-	if((node->getParent()->getColour() == false) && (sibNode->getColour() == false)
-		&& (sibNode->getNextLeft()->getColour() == false) && (sibNode->getNextRight()->getColour() == false))
+	if ((node->getParent()->getColour() == false) && (sibNode->getColour() == false) && (sibNode->getNextLeft()->getColour() == false) && (sibNode->getNextRight()->getColour() == false))
 	{
 		sibNode->setColour(true); // is now red
 		deleteCase1(node->getParent());
@@ -659,12 +651,11 @@ void binaryTree::deleteCase3(Node* node)
 	else
 		deleteCase4(node);
 }
-void binaryTree::deleteCase4(Node* node)
+void binaryTree::deleteCase4(Node *node)
 {
-	Node* sibNode = siblingNode(node);
+	Node *sibNode = siblingNode(node);
 
-	if((node->getParent()->getColour() == true) && (sibNode->getColour() == false) 
-		&& (sibNode->getNextLeft()->getColour() == false) && (sibNode->getNextRight()->getColour() == false))
+	if ((node->getParent()->getColour() == true) && (sibNode->getColour() == false) && (sibNode->getNextLeft()->getColour() == false) && (sibNode->getNextRight()->getColour() == false))
 	{
 		sibNode->setColour(true);
 		node->getParent()->setColour(false);
@@ -672,21 +663,19 @@ void binaryTree::deleteCase4(Node* node)
 	else
 		deleteCase5(node);
 }
-void binaryTree::deleteCase5(Node* node)
+void binaryTree::deleteCase5(Node *node)
 {
-	Node* sibNode = siblingNode(node);
+	Node *sibNode = siblingNode(node);
 
-	if(sibNode->getColour() == false)
+	if (sibNode->getColour() == false)
 	{
-		if((node == node->getParent()->getNextLeft()) && (sibNode->getNextRight()->getColour() == false) 
-			&& (sibNode->getNextLeft()->getColour() == true))
+		if ((node == node->getParent()->getNextLeft()) && (sibNode->getNextRight()->getColour() == false) && (sibNode->getNextLeft()->getColour() == true))
 		{
 			sibNode->setColour(true);
 			sibNode->getNextLeft()->setColour(false);
 			rotateRight(sibNode);
 		}
-		else if((node == node->getParent()->getNextRight()) && (sibNode->getNextLeft()->getColour() == false)
-			&& (sibNode->getNextRight()->getColour() == true))
+		else if ((node == node->getParent()->getNextRight()) && (sibNode->getNextLeft()->getColour() == false) && (sibNode->getNextRight()->getColour() == true))
 		{
 			sibNode->setColour(true);
 			sibNode->getNextRight()->setColour(false);
@@ -695,14 +684,14 @@ void binaryTree::deleteCase5(Node* node)
 	}
 	deleteCase6(node);
 }
-void binaryTree::deleteCase6(Node* node)
+void binaryTree::deleteCase6(Node *node)
 {
-	Node* sibNode = siblingNode(node);
+	Node *sibNode = siblingNode(node);
 
 	sibNode->setColour(node->getParent()->getColour());
 	node->getParent()->setColour(false);
 
-	if(node == node->getParent()->getNextLeft())
+	if (node == node->getParent()->getNextLeft())
 	{
 		sibNode->getNextRight()->setColour(false);
 		rotateLeft(node->getParent());
@@ -713,11 +702,11 @@ void binaryTree::deleteCase6(Node* node)
 		rotateRight(node->getParent());
 	}
 }
-Node* binaryTree::findRoot(Node* node)
+Node *binaryTree::findRoot(Node *node)
 {
-	while(true)
+	while (true)
 	{
-		if(node->getParent() != NULL)
+		if (node->getParent() != NULL)
 			node = node->getParent();
 		else
 			break;
@@ -725,8 +714,3 @@ Node* binaryTree::findRoot(Node* node)
 
 	return node;
 }
-
-
-
-		
-

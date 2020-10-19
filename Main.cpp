@@ -1,10 +1,10 @@
 // File: Main.cpp
-// Version: V1.1 
+// Version: V1.1
 // Date: 04/04/2012
-// Name: Daniel Clarke - Computer Science 
+// Name: Daniel Clarke - Computer Science
 // ID: n0271538
 // This program contains main(), and is the top layer where the user interacts with the system
-// Modification history: 
+// Modification history:
 // V1.1 4/4/2012
 
 #include "stdafx.h"
@@ -21,17 +21,17 @@
 
 using namespace std;
 
-	library lib;
+library lib;
 
 int main()
 {
 	srand((unsigned)time(NULL));
 	int selection = 0;
 	int selectID = 0;
-	
+
 	lib.filltree();
 
-	while(selection != 8)
+	while (selection != 8)
 	{
 		cout << endl
 			 << "Welcome" << endl
@@ -46,23 +46,25 @@ int main()
 			 << endl
 			 << "8. Exit" << endl
 			 << endl
-			 << "Please Enter a Selection" << endl  
+			 << "Please Enter a Selection" << endl
 			 << ">";
 
-		while(!(cin >> selection)) // validation for user input
+		while (!(cin >> selection)) // validation for user input
 		{
 			cout << "INCORRECT INPUT" << endl;
-			cin.clear(); // clears cin 
+			cin.clear();										 // clears cin
 			cin.ignore(numeric_limits<streamsize>::max(), '\n'); //ignores all items input
-			cout << endl <<  "Please Enter a Selection" << endl
-			<< ">"; //redisplays the message
+			cout << endl
+				 << "Please Enter a Selection" << endl
+				 << ">"; //redisplays the message
 		}
-		
+
 		cout << endl;
 
-		cout <<"You entered: " << selection << endl << endl;
+		cout << "You entered: " << selection << endl
+			 << endl;
 
-		switch(selection)
+		switch (selection)
 		{
 		case 1:
 
@@ -70,7 +72,7 @@ int main()
 			{
 				lib.insertVessel();
 			}
-			catch(exception& ex)
+			catch (exception &ex)
 			{
 				cout << "Error: " << ex.what() << endl;
 				lib.endGraceful();
@@ -80,10 +82,10 @@ int main()
 		case 2:
 
 			try
-			{	
+			{
 				lib.sizeOfList();
 			}
-			catch(exception& ex)
+			catch (exception &ex)
 			{
 				cout << "Error: " << ex.what() << endl;
 				lib.endGraceful();
@@ -96,7 +98,7 @@ int main()
 			{
 				lib.selectEditVessel();
 			}
-			catch(exception& ex)
+			catch (exception &ex)
 			{
 				cout << "Error: " << ex.what() << endl;
 				lib.endGraceful();
@@ -104,14 +106,14 @@ int main()
 			break;
 
 		case 4:
-			
+
 			try
 			{
 				lib.printVessels();
 			}
-			catch(exception& ex)
+			catch (exception &ex)
 			{
-				cout<< "Error: "<< ex.what() << endl;
+				cout << "Error: " << ex.what() << endl;
 				lib.endGraceful();
 			}
 			break;
@@ -122,7 +124,7 @@ int main()
 			{
 				lib.getVessel();
 			}
-			catch(exception& ex)
+			catch (exception &ex)
 			{
 				cout << "Error: " << ex.what() << endl;
 				lib.endGraceful();
@@ -135,9 +137,9 @@ int main()
 			{
 				lib.deleteVessel();
 			}
-			catch(exception& ex)
+			catch (exception &ex)
 			{
-				cout<< "Error: " << ex.what() << endl;
+				cout << "Error: " << ex.what() << endl;
 				lib.endGraceful();
 			}
 			break;
@@ -148,25 +150,20 @@ int main()
 			{
 				lib.hydrophoneSim();
 			}
-			catch(exception& ex)
+			catch (exception &ex)
 			{
 				cout << ex.what() << endl;
 				lib.endGraceful();
 			}
 			break;
-			
 		}
 	}
 
-return 0;
-
+	return 0;
 }
 
-int _tmain(int argc, _TCHAR* argv[])
+int _tmain(int argc, _TCHAR *argv[])
 {
 	main();
 	return 0;
 }
-
-	
-

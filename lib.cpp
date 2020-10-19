@@ -1,10 +1,10 @@
 // File: lib.cpp
-// Version: V1.1 
+// Version: V1.1
 // Date: 04/04/2012
-// Name: Daniel Clarke - Computer Science 
+// Name: Daniel Clarke - Computer Science
 // ID: n0271538
 // This program contains a library of functions which interact with the data layer (Red Black Tree), functions include, insert, edit, print, search, delete
-// Modification history: 
+// Modification history:
 // V1.1 4/4/2012
 
 #include "stdafx.h"
@@ -24,13 +24,13 @@
 
 using namespace std;
 
-	//this thing..
-	binaryTree MyList;
-	Node MyNode;
+//this thing..
+binaryTree MyList;
+Node MyNode;
 
 void library::filltree()
 {
-	AircraftCarrier *AC = new AircraftCarrier("AC", 45, 700, 10000 , 20000, 400, 4,20);
+	AircraftCarrier *AC = new AircraftCarrier("AC", 45, 700, 10000, 20000, 400, 4, 20);
 	MyList.insert(rand() % 9999, "a", AC);
 	AC = new AircraftCarrier("AC", 30, 650, 7000, 15000, 200, 5, 15);
 	MyList.insert(rand() % 9999, "b", AC);
@@ -42,47 +42,52 @@ void library::filltree()
 	MyList.insert(rand() % 9999, "e", AC);
 	AC = new AircraftCarrier("AC", 35, 500, 6500, 9000, 300, 5, 20);
 	MyList.insert(rand() % 9999, "f", AC);
-	AC = new AircraftCarrier("AC", 60,  550, 9500, 10000, 325, 7 , 2);
+	AC = new AircraftCarrier("AC", 60, 550, 9500, 10000, 325, 7, 2);
 	MyList.insert(rand() % 9999, "g", AC);
-	AC = new AircraftCarrier("AC", 15, 1000, 15000, 20000, 400, 4 , 10);
+	AC = new AircraftCarrier("AC", 15, 1000, 15000, 20000, 400, 4, 10);
 	MyList.insert(rand() % 9999, "h", AC);
 	AC = new AircraftCarrier("AC", 50, 1200, 20000, 15000, 200, 8, 12);
 	MyList.insert(rand() % 9999, "i", AC);
-	
 }
 void library::hydrophoneSim()
 {
 	system("CLS");
 
-	cout << "-Listening on Hydrophone-" << endl << endl;
+	cout << "-Listening on Hydrophone-" << endl
+		 << endl;
 
 	_signature = MyNode.generateKey();
 
 	cout << "Acoustic Signature detected! : " << _signature << endl
-		<< "Checking System for Possible Match..." << endl << endl;
+		 << "Checking System for Possible Match..." << endl
+		 << endl;
 
 	MyList.hydrophone(_signature);
-}	
-void library::Percent(Node* node, double percentage)
+}
+void library::Percent(Node *node, double percentage)
 {
-	if(percentage > 65)
+	if (percentage > 65)
 	{
-		cout << "Closest Match to: " << node->getKey() << " with " << setprecision(4) << percentage << "%" << endl << endl;
+		cout << "Closest Match to: " << node->getKey() << " with " << setprecision(4) << percentage << "%" << endl
+			 << endl;
 		streamOut(node->getKey(), node->getVesselName(), node->getVesselPtr());
 	}
 	else
 		cout << "Signature is Unidentified" << endl
-		<< "Only a " << setprecision(4) << percentage << "% Match to a Vessel in the System" << endl
-		<< "Could Not Make Comparison" << endl << endl;
+			 << "Only a " << setprecision(4) << percentage << "% Match to a Vessel in the System" << endl
+			 << "Could Not Make Comparison" << endl
+			 << endl;
 }
 void library::insertVessel()
 {
 	system("CLS");
 
 	//these Data Members can never be changed once entered
-	cout << "-Insert Vessel-" << endl << endl;
+	cout << "-Insert Vessel-" << endl
+		 << endl;
 	_signature = MyNode.generateKey();
-	cout << "Vessel's Acoustic Signature: " << _signature << endl << endl;
+	cout << "Vessel's Acoustic Signature: " << _signature << endl
+		 << endl;
 	_newName = setName();
 	cout << endl;
 
@@ -94,29 +99,32 @@ void library::selectEditVessel()
 {
 	system("CLS");
 
-	cout << "-Edit Vessel-" << endl << endl;
+	cout << "-Edit Vessel-" << endl
+		 << endl;
 
-	cout << "What would you like to Edit?" << endl << endl;
+	cout << "What would you like to Edit?" << endl
+		 << endl;
 
-	cout <<"1. VesselName" << endl
-		 <<"2. Vessel Data" << endl
-		 <<">";
+	cout << "1. VesselName" << endl
+		 << "2. Vessel Data" << endl
+		 << ">";
 
-	while(true)
+	while (true)
 	{
 		_select = validateCin();
-		if((_select < 1) || (_select > 2))
-			cout << "INCORRECT INPUT" << endl << endl;
+		if ((_select < 1) || (_select > 2))
+			cout << "INCORRECT INPUT" << endl
+				 << endl;
 		else
 			break;
-	}	
+	}
 
 	cout << "Enter an ID to edit" << endl;
 	cout << ">";
 	_keyToFind = validateCin();
 	cout << endl;
 
-	if(_select == 1)
+	if (_select == 1)
 	{
 		MyList.editNodeName(_keyToFind);
 		cout << "Vessel Name Edited" << endl;
@@ -126,111 +134,120 @@ void library::selectEditVessel()
 
 	endGraceful();
 }
-BaseVessel* library::fillVesselPtr()
+BaseVessel *library::fillVesselPtr()
 {
 	BaseVessel *returnPtr;
-	
-	cout << "What type of Vessel would you like to insert" << endl << endl
-	 << "Surface Vessels" << endl
-	 << "1. AirCraft Carrier" << endl
-	 << "2. Destroyer" << endl
-	 << "Fleet Auxiliaries" << endl
-	 << "3. Tanker" << endl
-	 << "4. Landing Platform Dock" << endl
-	 << "Submarines" << endl
-	 << "5. Ballistic Sub" << endl
-	 << "6. Attack Sub" << endl
-	 << ">";
-	
-	while(true)
+
+	cout << "What type of Vessel would you like to insert" << endl
+		 << endl
+		 << "Surface Vessels" << endl
+		 << "1. AirCraft Carrier" << endl
+		 << "2. Destroyer" << endl
+		 << "Fleet Auxiliaries" << endl
+		 << "3. Tanker" << endl
+		 << "4. Landing Platform Dock" << endl
+		 << "Submarines" << endl
+		 << "5. Ballistic Sub" << endl
+		 << "6. Attack Sub" << endl
+		 << ">";
+
+	while (true)
 	{
 		_select = validateCin();
-		if((_select < 1) || (_select > 6))
-			cout << "INCORRECT INPUT" << endl << endl;
+		if ((_select < 1) || (_select > 6))
+			cout << "INCORRECT INPUT" << endl
+				 << endl;
 		else
 			break;
-	}	
+	}
 
 	cout << endl;
 
-	switch(_select)
+	switch (_select)
 	{
 	case 1:
-		{
-			cout << "You Chose 'Aircraft Carrier'" << endl << endl;
-			setBV();
-			setSF();
-			setAC();
-			AircraftCarrier *AC = new AircraftCarrier("AC", _newSpeed, _newLength, _newRange, _newDisp, _newCrew, _newHeli, _newAircraft);
-			//pass object to tree insert function
-			returnPtr =  AC;
-			break;
-		}
+	{
+		cout << "You Chose 'Aircraft Carrier'" << endl
+			 << endl;
+		setBV();
+		setSF();
+		setAC();
+		AircraftCarrier *AC = new AircraftCarrier("AC", _newSpeed, _newLength, _newRange, _newDisp, _newCrew, _newHeli, _newAircraft);
+		//pass object to tree insert function
+		returnPtr = AC;
+		break;
+	}
 	case 2:
-		{
-			cout << "You Chose 'Destroyer'" << endl << endl;
-			setBV();
-			setSF();
-			setDestroyer();
-			//create new instance of vessel and call constructor
-			Destroyer *Destroy = new Destroyer("D", _newSpeed, _newLength, _newRange, _newDisp, _newCrew, _newHeli, _newWep);
-			//pass object to tree insert function
-			returnPtr =   Destroy;
-			break;
-		}
+	{
+		cout << "You Chose 'Destroyer'" << endl
+			 << endl;
+		setBV();
+		setSF();
+		setDestroyer();
+		//create new instance of vessel and call constructor
+		Destroyer *Destroy = new Destroyer("D", _newSpeed, _newLength, _newRange, _newDisp, _newCrew, _newHeli, _newWep);
+		//pass object to tree insert function
+		returnPtr = Destroy;
+		break;
+	}
 	case 3:
-		{
-			cout << "You Chose 'Tanker'" << endl << endl;
-			setBV();
-			setSF();
-			setFleetAux();
-			setTanker();
-			//create new instance of vessel and call constructor
-			Tanker *Tank = new Tanker("T",_newSpeed, _newLength, _newRange, _newDisp, _newCrew, _newHeli, _newDeck, _newCapL);
-			//pass object to tree insert function7
-			returnPtr =  Tank;
+	{
+		cout << "You Chose 'Tanker'" << endl
+			 << endl;
+		setBV();
+		setSF();
+		setFleetAux();
+		setTanker();
+		//create new instance of vessel and call constructor
+		Tanker *Tank = new Tanker("T", _newSpeed, _newLength, _newRange, _newDisp, _newCrew, _newHeli, _newDeck, _newCapL);
+		//pass object to tree insert function7
+		returnPtr = Tank;
 		break;
-		}
+	}
 	case 4:
-		{
-			cout << "You Chose 'Landing Platform Dock'" << endl << endl;
-			setBV();
-			setSF();
-			setFleetAux();
-			setLandPlat();
-			//create new instance of vessel and call constructor
-			LandingPlat *LP = new LandingPlat("LP",_newSpeed, _newLength, _newRange, _newDisp, _newCrew, _newHeli, _newDeck, _newCapM3);
-			//pass object to tree insert function
-			returnPtr = LP;
+	{
+		cout << "You Chose 'Landing Platform Dock'" << endl
+			 << endl;
+		setBV();
+		setSF();
+		setFleetAux();
+		setLandPlat();
+		//create new instance of vessel and call constructor
+		LandingPlat *LP = new LandingPlat("LP", _newSpeed, _newLength, _newRange, _newDisp, _newCrew, _newHeli, _newDeck, _newCapM3);
+		//pass object to tree insert function
+		returnPtr = LP;
 		break;
-		}
+	}
 	case 5:
-		{
-			cout << "You Chose 'Ballistic Submarine'" << endl << endl;
-			setBV();
-			setSub();
-			setBSub();
-			//create new instance of vessel and call constructor
-			BallisticSub *BS = new BallisticSub("BS", _newSpeed, _newLength, _newRange, _newDisp, _newCrew, _newDiveDepth, _newSubSpeed, _newSubDisp, _newSLBM);
-			//pass object to tree insert function	
-			returnPtr = BS;
+	{
+		cout << "You Chose 'Ballistic Submarine'" << endl
+			 << endl;
+		setBV();
+		setSub();
+		setBSub();
+		//create new instance of vessel and call constructor
+		BallisticSub *BS = new BallisticSub("BS", _newSpeed, _newLength, _newRange, _newDisp, _newCrew, _newDiveDepth, _newSubSpeed, _newSubDisp, _newSLBM);
+		//pass object to tree insert function
+		returnPtr = BS;
 		break;
-		}
+	}
 	case 6:
-		{
-			cout << "You Chose 'Attack Submarine'" << endl << endl;
-			setBV();
-			setSub();
-			setASub();
-			//create new instance of vessel and call constructor
-			AttackSub *AS = new AttackSub("AS", _newSpeed, _newLength, _newRange, _newDisp, _newCrew, _newDiveDepth, _newSubSpeed, _newSubDisp, _newTorpedos);
-			//pass object to tree insert function
-			returnPtr = AS;
-			break;
-		}
+	{
+		cout << "You Chose 'Attack Submarine'" << endl
+			 << endl;
+		setBV();
+		setSub();
+		setASub();
+		//create new instance of vessel and call constructor
+		AttackSub *AS = new AttackSub("AS", _newSpeed, _newLength, _newRange, _newDisp, _newCrew, _newDiveDepth, _newSubSpeed, _newSubDisp, _newTorpedos);
+		//pass object to tree insert function
+		returnPtr = AS;
+		break;
+	}
 	}
 
-	cout << endl << "Vessel Written" << endl;
+	cout << endl
+		 << "Vessel Written" << endl;
 
 	return returnPtr;
 }
@@ -284,7 +301,7 @@ void library::setFleetAux()
 	cout << ">";
 	_newDeck = validateCin();
 }
-void  library::setAC()
+void library::setAC()
 {
 	cout << "Enter No. Aircraft: " << endl;
 	cout << ">";
@@ -296,22 +313,23 @@ void library::setDestroyer()
 	cout << "1. Gun System" << endl;
 	cout << "2. Guided Missle System" << endl;
 	cout << ">";
-	
-	while(true)
+
+	while (true)
 	{
 		_select = validateCin();
-		if(_select == 1)
+		if (_select == 1)
 		{
 			_newWep = "Gun System";
 			break;
 		}
-		if(_select == 2)
+		if (_select == 2)
 		{
 			_newWep = "Guilded Missle System";
 			break;
 		}
-	}	
-	cout << endl << "You Chose: " << _newWep << endl;
+	}
+	cout << endl
+		 << "You Chose: " << _newWep << endl;
 }
 void library::setTanker()
 {
@@ -345,18 +363,20 @@ void library::sizeOfList()
 void library::printVessels()
 {
 	system("CLS");
-	cout << "-Vessel Print-" << endl << endl;
+	cout << "-Vessel Print-" << endl
+		 << endl;
 	cout << "In which order would you like to print" << endl
 		 << "1. In Order" << endl
 		 << "2. Post Order" << endl
 		 << "3. No Order" << endl
 		 << ">";
 
-	while(true)
+	while (true)
 	{
 		_select = validateCin();
-		if((_select < 1) || (_select > 3))
-			cout << "INCORRECT INPUT" << endl << endl;
+		if ((_select < 1) || (_select > 3))
+			cout << "INCORRECT INPUT" << endl
+				 << endl;
 		else
 		{
 			MyList.publicPrint(_select);
@@ -372,23 +392,25 @@ void library::getVessel()
 {
 	system("CLS");
 
-	cout << "-System Search-" << endl << endl;
+	cout << "-System Search-" << endl
+		 << endl;
 
 	cout << "How would you like to search" << endl
-		<< "1. By Signature" << endl
-		<< "2. By Name" << endl
-		<< ">";
+		 << "1. By Signature" << endl
+		 << "2. By Name" << endl
+		 << ">";
 
-	while(true)
+	while (true)
 	{
 		_select = validateCin();
-		if((_select < 1) || (_select > 2))
-			cout << "INCORRECT INPUT" << endl << endl;
+		if ((_select < 1) || (_select > 2))
+			cout << "INCORRECT INPUT" << endl
+				 << endl;
 		else
 			break;
-	}	
+	}
 
-	if(_select == 1)
+	if (_select == 1)
 	{
 		cout << "Please Enter an ID:" << endl;
 		cout << ">";
@@ -403,14 +425,14 @@ void library::getVessel()
 	{
 		cout << "Please Enter a Name:" << endl;
 		cout << ">";
-	
+
 		cin >> _searchName;
 
 		MyList.findVesselName(_searchName);
 
 		cout << endl;
 	}
-	
+
 	endGraceful();
 }
 
@@ -418,90 +440,94 @@ void library::deleteVessel()
 {
 	system("CLS");
 
-	cout << "-Delete Vessel-" << endl << endl;
+	cout << "-Delete Vessel-" << endl
+		 << endl;
 
 	cout << "Please Enter ID to Delete Vessel" << endl;
-	cout << ">"; 
+	cout << ">";
 
 	_select = validateCin();
-	
+
 	MyList.deletePublic(_select);
 
 	cout << "Vessel With ID " << _select << " Deleted." << endl;
 
 	endGraceful();
 }
-void library::streamOut(int _signature, std::string _vesselName, BaseVessel* vesselPtr)
+void library::streamOut(int _signature, std::string _vesselName, BaseVessel *vesselPtr)
 {
-	cout << endl << "-Vessel Data-" << endl << endl;
+	cout << endl
+		 << "-Vessel Data-" << endl
+		 << endl;
 
-	cout << "Acoustic Signature: " <<_signature << endl
-		<< "Vessel Name: " << _vesselName << endl
-		<< endl
-		<< "Max Speed: " << vesselPtr->getSpeed() << endl
-		<< "Lenght: " << vesselPtr->getLength() << endl
-		<< "Max Range: " << vesselPtr->getRange() << endl
-		<< "Displacement: " << vesselPtr->getDisp() << endl
-		<< "Crew Size: " << vesselPtr->getCrew() << endl << endl;
+	cout << "Acoustic Signature: " << _signature << endl
+		 << "Vessel Name: " << _vesselName << endl
+		 << endl
+		 << "Max Speed: " << vesselPtr->getSpeed() << endl
+		 << "Lenght: " << vesselPtr->getLength() << endl
+		 << "Max Range: " << vesselPtr->getRange() << endl
+		 << "Displacement: " << vesselPtr->getDisp() << endl
+		 << "Crew Size: " << vesselPtr->getCrew() << endl
+		 << endl;
 
 	printDerivedData(vesselPtr);
 
 	cout << endl;
-				
 }
-void library::printDerivedData(BaseVessel* vesselPtr)
+void library::printDerivedData(BaseVessel *vesselPtr)
 {
-	if(vesselPtr->getVesselType() == "AC")
+	if (vesselPtr->getVesselType() == "AC")
 	{
-		AircraftCarrier *AC = static_cast<AircraftCarrier*>(vesselPtr);
+		AircraftCarrier *AC = static_cast<AircraftCarrier *>(vesselPtr);
 		cout << "No. Helicopters: " << AC->getHeli() << endl
-			<< "No. Aircraft: " << AC->getCraft() << endl;
+			 << "No. Aircraft: " << AC->getCraft() << endl;
 	}
-	if(vesselPtr->getVesselType() == "D")
+	if (vesselPtr->getVesselType() == "D")
 	{
-		Destroyer *D = static_cast<Destroyer*>(vesselPtr);
+		Destroyer *D = static_cast<Destroyer *>(vesselPtr);
 		cout << "No. Helicopters: " << D->getHeli() << endl
-			<< "Weapon System: " << D->getWep() << endl;
+			 << "Weapon System: " << D->getWep() << endl;
 	}
-	if(vesselPtr->getVesselType() == "T")
+	if (vesselPtr->getVesselType() == "T")
 	{
-		Tanker *T = static_cast<Tanker*>(vesselPtr);
+		Tanker *T = static_cast<Tanker *>(vesselPtr);
 		cout << "No. Helicopters: " << T->getHeli() << endl
-			<< "Desk Size: " << T->getDeck() << endl
-			<< "Capacity in Litres: " << T->getCapL() << endl;
+			 << "Desk Size: " << T->getDeck() << endl
+			 << "Capacity in Litres: " << T->getCapL() << endl;
 	}
-	if(vesselPtr->getVesselType() == "LP")
+	if (vesselPtr->getVesselType() == "LP")
 	{
-		LandingPlat *LP = static_cast<LandingPlat*>(vesselPtr);
+		LandingPlat *LP = static_cast<LandingPlat *>(vesselPtr);
 		cout << "No. Helicopters: " << LP->getHeli() << endl
-			<< "Desk Size: " << LP->getDeck() << endl
-			<< "Capcity in Cubic Metres: " << LP->getCapM3() << endl;
+			 << "Desk Size: " << LP->getDeck() << endl
+			 << "Capcity in Cubic Metres: " << LP->getCapM3() << endl;
 	}
-	if(vesselPtr->getVesselType() == "BS")
+	if (vesselPtr->getVesselType() == "BS")
 	{
-		BallisticSub *BS = static_cast<BallisticSub*>(vesselPtr);
+		BallisticSub *BS = static_cast<BallisticSub *>(vesselPtr);
 		cout << "Maximum Dive Depth: " << BS->getDiveDepth() << endl
-			<< "Maximum Submerged Speed: " << BS->getSubSpeed() << endl
-			<< "Submerged Displacement: " << BS->getSubDisp() << endl
-			<< "No. SLBM: " << BS->getSLBM() << endl;
+			 << "Maximum Submerged Speed: " << BS->getSubSpeed() << endl
+			 << "Submerged Displacement: " << BS->getSubDisp() << endl
+			 << "No. SLBM: " << BS->getSLBM() << endl;
 	}
-	if(vesselPtr->getVesselType() == "AS")
+	if (vesselPtr->getVesselType() == "AS")
 	{
 		AttackSub *AS = static_cast<AttackSub *>(vesselPtr);
 		cout << "Maximum Dive Depth: " << AS->getDiveDepth() << endl
-			<< "Maximum Submerged Speed: " << AS->getSubSpeed() << endl
-			<< "Submerged Displacement: " << AS->getSubDisp() << endl
-			<< "No. Torpedos: " << AS->getTorpedos() << endl;
+			 << "Maximum Submerged Speed: " << AS->getSubSpeed() << endl
+			 << "Submerged Displacement: " << AS->getSubDisp() << endl
+			 << "No. Torpedos: " << AS->getTorpedos() << endl;
 	}
 }
 void library::endGraceful()
 {
-	cout << endl << "Press any 'y' to return" << endl;
+	cout << endl
+		 << "Press any 'y' to return" << endl;
 
 	_confirm = 'a'; //something that isnt y
-	
-	while(_confirm != 'y')
-	{		
+
+	while (_confirm != 'y')
+	{
 		cin >> _confirm;
 	}
 
@@ -510,7 +536,7 @@ void library::endGraceful()
 int library::validateCin()
 {
 	int checkVar;
-	while(!(cin >> checkVar))
+	while (!(cin >> checkVar))
 	{
 		cout << "INCORRECT INPUT" << endl;
 		cin.clear();
