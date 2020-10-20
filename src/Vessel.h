@@ -1,27 +1,22 @@
 #pragma once
 
 #include <string>
+#include <iostream>
 
 //base class
 //3 levels of inheritence
 class BaseVessel
 {
 protected:
-	std::string _vesselType;
-	unsigned int _speed; //knots
-	unsigned int _length; //metres
-	unsigned int _maxRange; //nautical miles
-	unsigned int _displacement; //tons
-	unsigned int _crewCompliment; //a number
+	std::string name;
+	unsigned int speed; //knots
+	unsigned int length; //metres
+	unsigned int maxRange; //nautical miles
+	unsigned int displacement; //tons
+	unsigned int crewCompliment; //a number
 public:
-	BaseVessel();
-	BaseVessel(std::string vesselType, unsigned int newSpeed, unsigned int newLength, unsigned int newRange, unsigned int newDisp, unsigned int newCrew);
-	virtual unsigned int getSpeed(void);
-	virtual unsigned int getLength(void);
-	virtual unsigned int getRange(void);
-	virtual unsigned int getDisp(void);
-	virtual unsigned int getCrew(void);
-	virtual std::string getVesselType(void);
+	BaseVessel(std::istream& inStream);
+	virtual void Display(std::ostream& outStream) const;
 };
 
 //derived classes
@@ -29,89 +24,85 @@ public:
 class SurfaceVessel : public BaseVessel
 {
 protected:
-	unsigned int _numHelicopter;
+	unsigned int numHelicopter;
 public:
-	SurfaceVessel();
-	SurfaceVessel(std::string vesselType, unsigned int newSpeed, unsigned int newLength, unsigned int newRange, unsigned int newDisp, unsigned int newCrew ,unsigned int newHeli);
-	unsigned int getHeli(void);
+	SurfaceVessel(std::istream& inStream);
+	virtual void Display(std::ostream& outStream) const override;
 };
 
 class AircraftCarrier : public SurfaceVessel
 {
 protected:
-	unsigned int _numAircraft;
+	unsigned int numAircraft;
 public:
-	AircraftCarrier();
-	AircraftCarrier(std::string vesselType, unsigned int newSpeed, unsigned int newLength, unsigned int newRange, unsigned int newDisp, unsigned int newCrew, unsigned int newHeli, unsigned int newAircraft);
-	unsigned int getCraft(void);
+	AircraftCarrier(std::istream& inStream);
+	virtual void Display(std::ostream& outStream) const override;
 };
 
 class Destroyer : public SurfaceVessel
 {
 protected:
-	std::string _wepSystem;
+	std::string wepSystem;
 public:
-	Destroyer(std::string vesselType, unsigned int newSpeed, unsigned int newLength, unsigned int newRange, unsigned int newDisp, unsigned int newCrew, unsigned int newHeli, std::string newWep);
-	std::string getWep(void);
+	Destroyer(std::istream& inStream);
+	virtual void Display(std::ostream& outStream) const override;
 };
 
 class FleetAuxiliary : public SurfaceVessel
 {
 protected: 
-	unsigned int _deckSpace; //metres
+	unsigned int deckSpace; //metres
 public:
-	FleetAuxiliary(std::string vesselType, unsigned int newSpeed, unsigned int newLength, unsigned int newRange, unsigned int newDisp, unsigned int newCrew, unsigned int newHeli, unsigned int newDeck);
-	unsigned int getDeck(void);
+	FleetAuxiliary(std::istream & inStream);
+	virtual void Display(std::ostream & outStream) const override;
 };
 
 class Tanker : public FleetAuxiliary
 {
 protected: 
-	unsigned int _capacity; //litres
+	unsigned int capacity; //litres
 public:
-	Tanker(std::string vesselType, unsigned int newSpeed, unsigned int newLength, unsigned int newRange, unsigned int newDisp, unsigned int newCrew, unsigned int newHeli, unsigned int newDeck, unsigned int newCap);	
-	unsigned int getCapL(void);
+	Tanker(std::istream & inStream);
+	virtual void Display(std::ostream & outStream) const override;
 };
 
 class LandingPlat : public FleetAuxiliary
 {
 protected: 
-	unsigned int _capacity; //cubic metres
+	unsigned int capacity; //cubic metres
 public:
-	LandingPlat(std::string vesselType, unsigned int newSpeed,unsigned int newLength, unsigned int newRange, unsigned int newDisp, unsigned int newCrew, unsigned int newHeli, unsigned int newDeck, unsigned int newCap);
-	unsigned int getCapM3(void);
+	LandingPlat(std::istream& inStream);
+	virtual void Display(std::ostream & outStream) const override;
 };
 
 //Submarines
 class Submarine : public BaseVessel
 {
 protected:
-	unsigned int _maxDiveDepth; //metres
-	unsigned int _maxSubSpeed; //knots
-	unsigned int _subDisplacement; //tons
+	unsigned int maxDiveDepth; //metres
+	unsigned int maxSubSpeed; //knots
+	unsigned int subDisplacement; //tons
 public:
-	Submarine(std::string vesselType, unsigned int newSpeed, unsigned int newLength, unsigned int newRange, unsigned int newDisp, unsigned int newCrew, unsigned int maxDepth, unsigned int maxSpeed, unsigned int newSubsubSDisp);
-	unsigned int getDiveDepth(void);
-	unsigned int getSubSpeed(void);
-	unsigned int getSubDisp(void); 
+	Submarine(std::istream & inStream);
+	virtual void Display(std::ostream & outStream) const override;
 };
 
 class BallisticSub : public Submarine
 {
 protected:
-	unsigned int _numSLBM; 
+	unsigned int numSLBM; 
 public:
-	BallisticSub(std::string vesselType, unsigned int newSpeed, unsigned int newLength, unsigned int newRange, unsigned int newDisp, unsigned int newCrew, unsigned int maxDepth, unsigned int maxSpeed, unsigned int newSubDisp, unsigned int newSLBM);
-	unsigned int getSLBM(void);
+	BallisticSub(std::istream & inStream);
+	virtual void Display(std::ostream & outStream) const override;
 };
 
 class AttackSub : public Submarine
 {
 protected:
-	unsigned int _numTorpedos;
+	unsigned int numTorpedos;
 public:
-	AttackSub(std::string vesselType, unsigned int newSpeed, unsigned int newLength, unsigned int newRange, unsigned int newDisp, unsigned int newCrew, unsigned int maxDepth, unsigned int maxSpeed, unsigned int newSubDisp, unsigned int newTorpedo);
-	unsigned int getTorpedos(void);
+	AttackSub(std::istream & inStream);
+	virtual void Display(std::ostream & outStream) const override;
 };
 
 

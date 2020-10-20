@@ -1,158 +1,72 @@
-// File: Main.cpp
-// Version: V1.1
-// Date: 04/04/2012
-// Name: Daniel Clarke - Computer Science
-// ID: n0271538
-// This program contains main(), and is the top layer where the user interacts with the system
-// Modification history:
-// V1.1 4/4/2012
-
-#include "lib.h"
-#include "RedBlackTree.h"
 
 //cin, cout stuff
 #include <iostream>
 #include <iomanip>
 #include <limits>
 #include <time.h>
+#include <map>
+#include <functional>
 
-using namespace std;
-
-library lib;
+#include "lib.h"
+#include "RedBlackTree.h"
 
 int main()
 {
+	auto lib = std::make_shared<library>();
+	std::map<int, std::function<void(void)>> options{
+		{1, [&lib](void) -> void { lib->insertVessel(); }},
+		{2, [&lib](void) -> void { lib->sizeOfList(); }},
+		{3, [&lib](void) -> void { lib->selectEditVessel(); }},
+		{4, [&lib](void) -> void { lib->printVessels(); }},
+		{5, [&lib](void) -> void { lib->getVessel(); }},
+		{6, [&lib](void) -> void { lib->deleteVessel(); }},
+		{6, [&lib](void) -> void { lib->hydrophoneSim(); }},
+	};
+
 	srand((unsigned)time(NULL));
 	int selection = 0;
 	int selectID = 0;
 
-	lib.filltree();
-
 	while (selection != 8)
 	{
-		cout << endl
-			 << "Welcome" << endl
-			 << endl
-			 << "1. Add Vessel to System" << endl
-			 << "2. No. Vessels In System" << endl
-			 << "3. Edit Vessel in System" << endl
-			 << "4. Print System" << endl
-			 << "5. Get Vessel from System" << endl
-			 << "6. Delete Vessel from System" << endl
-			 << "7. Simulate Hydrophone" << endl
-			 << endl
-			 << "8. Exit" << endl
-			 << endl
-			 << "Please Enter a Selection" << endl
+		std::cout << std::endl
+			 << "Welcome" << std::endl
+			 << std::endl
+			 << "1. Add Vessel to System" << std::endl
+			 << "2. No. Vessels In System" << std::endl
+			 << "3. Edit Vessel in System" << std::endl
+			 << "4. Print System" << std::endl
+			 << "5. Get Vessel from System" << std::endl
+			 << "6. Delete Vessel from System" << std::endl
+			 << "7. Simulate Hydrophone" << std::endl
+			 << std::endl
+			 << "8. Exit" << std::endl
+			 << std::endl
+			 << "Please Enter a Selection" << std::endl
 			 << ">";
 
-		while (!(cin >> selection)) // validation for user input
+		while (!(std::cin >> selection)) // validation for user input
 		{
-			cout << "INCORRECT INPUT" << endl;
-			cin.clear();										 // clears cin
-			cin.ignore(numeric_limits<streamsize>::max(), '\n'); //ignores all items input
-			cout << endl
-				 << "Please Enter a Selection" << endl
+			std::cout << "INCORRECT INPUT" << std::endl;
+			std::cin.clear();										 // clears cin
+			std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); //ignores all items input
+			std::cout << std::endl
+				 << "Please Enter a Selection" << std::endl
 				 << ">"; //redisplays the message
 		}
 
-		cout << endl;
+		std::cout << std::endl 
+			<< "You entered: " << selection << std::endl
+			<< std::endl;
 
-		cout << "You entered: " << selection << endl
-			 << endl;
-
-		switch (selection)
+		try
 		{
-		case 1:
-
-			try
-			{
-				lib.insertVessel();
-			}
-			catch (exception &ex)
-			{
-				cout << "Error: " << ex.what() << endl;
-				lib.endGraceful();
-			}
-			break;
-
-		case 2:
-
-			try
-			{
-				lib.sizeOfList();
-			}
-			catch (exception &ex)
-			{
-				cout << "Error: " << ex.what() << endl;
-				lib.endGraceful();
-			}
-			break;
-
-		case 3:
-
-			try
-			{
-				lib.selectEditVessel();
-			}
-			catch (exception &ex)
-			{
-				cout << "Error: " << ex.what() << endl;
-				lib.endGraceful();
-			}
-			break;
-
-		case 4:
-
-			try
-			{
-				lib.printVessels();
-			}
-			catch (exception &ex)
-			{
-				cout << "Error: " << ex.what() << endl;
-				lib.endGraceful();
-			}
-			break;
-
-		case 5:
-
-			try
-			{
-				lib.getVessel();
-			}
-			catch (exception &ex)
-			{
-				cout << "Error: " << ex.what() << endl;
-				lib.endGraceful();
-			}
-			break;
-
-		case 6:
-
-			try
-			{
-				lib.deleteVessel();
-			}
-			catch (exception &ex)
-			{
-				cout << "Error: " << ex.what() << endl;
-				lib.endGraceful();
-			}
-			break;
-
-		case 7:
-
-			try
-			{
-				lib.hydrophoneSim();
-			}
-			catch (exception &ex)
-			{
-				cout << ex.what() << endl;
-				lib.endGraceful();
-			}
-			break;
+			options[selection]();
+		}
+		catch (std::exception& ex)
+		{
+			std::cout << "Error: " << ex.what() << std::endl;
+			lib->endGraceful();
 		}
 	}
 

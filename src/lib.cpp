@@ -25,409 +25,254 @@ using namespace std;
 binaryTree MyList;
 Node MyNode;
 
-void library::filltree()
-{
-	AircraftCarrier *AC = new AircraftCarrier("AC", 45, 700, 10000, 20000, 400, 4, 20);
-	MyList.insert(rand() % 9999, "a", AC);
-	AC = new AircraftCarrier("AC", 30, 650, 7000, 15000, 200, 5, 15);
-	MyList.insert(rand() % 9999, "b", AC);
-	AC = new AircraftCarrier("AC", 20, 800, 8000, 12000, 125, 3, 10);
-	MyList.insert(rand() % 9999, "c", AC);
-	AC = new AircraftCarrier("AC", 24, 400, 9000, 10000, 225, 5, 12);
-	MyList.insert(rand() % 9999, "d", AC);
-	AC = new AircraftCarrier("AC", 30, 400, 7500, 12050, 150, 2, 7);
-	MyList.insert(rand() % 9999, "e", AC);
-	AC = new AircraftCarrier("AC", 35, 500, 6500, 9000, 300, 5, 20);
-	MyList.insert(rand() % 9999, "f", AC);
-	AC = new AircraftCarrier("AC", 60, 550, 9500, 10000, 325, 7, 2);
-	MyList.insert(rand() % 9999, "g", AC);
-	AC = new AircraftCarrier("AC", 15, 1000, 15000, 20000, 400, 4, 10);
-	MyList.insert(rand() % 9999, "h", AC);
-	AC = new AircraftCarrier("AC", 50, 1200, 20000, 15000, 200, 8, 12);
-	MyList.insert(rand() % 9999, "i", AC);
-}
 void library::hydrophoneSim()
 {
 	system("CLS");
 
-	cout << "-Listening on Hydrophone-" << endl
-		 << endl;
+	std::cout << "-Listening on Hydrophone-" << std::endl
+		 << std::endl;
 
-	_signature = MyNode.generateKey();
+	auto signature = MyNode.generateKey();
 
-	cout << "Acoustic Signature detected! : " << _signature << endl
-		 << "Checking System for Possible Match..." << endl
-		 << endl;
+	std::cout << "Acoustic Signature detected! : " << signature << std::endl
+		 << "Checking System for Possible Match..." << std::endl
+		 << std::endl;
 
-	MyList.hydrophone(_signature);
+	MyList.hydrophone(signature);
 }
+
 void library::Percent(Node *node, double percentage)
 {
 	if (percentage > 65)
 	{
-		cout << "Closest Match to: " << node->getKey() << " with " << setprecision(4) << percentage << "%" << endl
-			 << endl;
+		std::cout << "Closest Match to: " << node->getKey() << " with " << setprecision(4) << percentage << "%" << std::endl
+			 << std::endl;
 		streamOut(node->getKey(), node->getVesselName(), node->getVesselPtr());
 	}
 	else
-		cout << "Signature is Unidentified" << endl
-			 << "Only a " << setprecision(4) << percentage << "% Match to a Vessel in the System" << endl
-			 << "Could Not Make Comparison" << endl
-			 << endl;
+	{
+		std::cout << "Signature is Unidentified" << std::endl
+			<< "Only a " << setprecision(4) << percentage << "% Match to a Vessel in the System" << std::endl
+			<< "Could Not Make Comparison" << std::endl
+			<< std::endl;
+	}
 }
+
 void library::insertVessel()
 {
 	system("CLS");
 
 	//these Data Members can never be changed once entered
-	cout << "-Insert Vessel-" << endl
-		 << endl;
-	_signature = MyNode.generateKey();
-	cout << "Vessel's Acoustic Signature: " << _signature << endl
-		 << endl;
-	_newName = setName();
-	cout << endl;
+	std::cout << "-Insert Vessel-" << std::endl
+		 << std::endl;
+	auto signature = MyNode.generateKey();
+	std::cout << "Vessel's Acoustic Signature: " << signature << std::endl
+		 << std::endl;
+	auto newName = setName();
+	std::cout << std::endl;
 
-	MyList.insert(_signature, _newName, fillVesselPtr());
+	MyList.insert(signature, newName, fillVesselPtr());
 
 	endGraceful();
 }
+
 void library::selectEditVessel()
 {
 	system("CLS");
 
-	cout << "-Edit Vessel-" << endl
-		 << endl;
+	std::cout << "-Edit Vessel-" << std::endl
+		 << std::endl;
 
-	cout << "What would you like to Edit?" << endl
-		 << endl;
+	std::cout << "What would you like to Edit?" << std::endl
+		 << std::endl;
 
-	cout << "1. VesselName" << endl
-		 << "2. Vessel Data" << endl
+	std::cout << "1. VesselName" << std::endl
+		 << "2. Vessel Data" << std::endl
 		 << ">";
 
-	while (true)
+	auto select = 0;
+	for (;;)
 	{
-		_select = validateCin();
-		if ((_select < 1) || (_select > 2))
-			cout << "INCORRECT INPUT" << endl
-				 << endl;
-		else
-			break;
+		select = validateCin();
+		if ((select < 1) || (select > 2))
+		{
+			std::cout << "INCORRECT INPUT" << std::endl
+				<< std::endl;
+			continue;
+		}
+		break;	
 	}
 
-	cout << "Enter an ID to edit" << endl;
-	cout << ">";
-	_keyToFind = validateCin();
-	cout << endl;
+	std::cout << "Enter an ID to edit" << std::endl;
+	std::cout << ">";
+	auto keyToFind = validateCin();
+	std::cout << std::endl;
 
-	if (_select == 1)
+	if (select == 1)
 	{
-		MyList.editNodeName(_keyToFind);
-		cout << "Vessel Name Edited" << endl;
+		MyList.editNodeName(keyToFind);
+		std::cout << "Vessel Name Edited" << std::endl;
 	}
 	else
-		MyList.editNode(_keyToFind);
+	{
+		MyList.editNode(keyToFind);
+	}
 
 	endGraceful();
 }
+
 BaseVessel *library::fillVesselPtr()
 {
-	BaseVessel *returnPtr;
-
-	cout << "What type of Vessel would you like to insert" << endl
-		 << endl
-		 << "Surface Vessels" << endl
-		 << "1. AirCraft Carrier" << endl
-		 << "2. Destroyer" << endl
-		 << "Fleet Auxiliaries" << endl
-		 << "3. Tanker" << endl
-		 << "4. Landing Platform Dock" << endl
-		 << "Submarines" << endl
-		 << "5. Ballistic Sub" << endl
-		 << "6. Attack Sub" << endl
+	std::cout << "What type of Vessel would you like to insert" << std::endl
+		 << std::endl
+		 << "Surface Vessels" << std::endl
+		 << "1. AirCraft Carrier" << std::endl
+		 << "2. Destroyer" << std::endl
+		 << "Fleet Auxiliaries" << std::endl
+		 << "3. Tanker" << std::endl
+		 << "4. Landing Platform Dock" << std::endl
+		 << "Submarines" << std::endl
+		 << "5. Ballistic Sub" << std::endl
+		 << "6. Attack Sub" << std::endl
 		 << ">";
 
-	while (true)
+	auto select = 0;
+	for (;;)
 	{
-		_select = validateCin();
-		if ((_select < 1) || (_select > 6))
-			cout << "INCORRECT INPUT" << endl
-				 << endl;
-		else
-			break;
+		select = validateCin();
+		if ((select < 1) || (select > 6))
+		{
+			std::cout << "INCORRECT INPUT" << std::endl
+				<< std::endl;
+			continue;
+		}
+		break;
 	}
 
-	cout << endl;
+	std::cout << std::endl;
 
-	switch (_select)
+	switch (select)
 	{
 	case 1:
-	{
-		cout << "You Chose 'Aircraft Carrier'" << endl
-			 << endl;
-		setBV();
-		setSF();
-		setAC();
-		AircraftCarrier *AC = new AircraftCarrier("AC", _newSpeed, _newLength, _newRange, _newDisp, _newCrew, _newHeli, _newAircraft);
-		//pass object to tree insert function
-		returnPtr = AC;
-		break;
-	}
+		std::cout << "You Chose 'Aircraft Carrier'" << std::endl
+			 << std::endl;
+		return new AircraftCarrier(std::cin);
 	case 2:
-	{
-		cout << "You Chose 'Destroyer'" << endl
-			 << endl;
-		setBV();
-		setSF();
-		setDestroyer();
+		std::cout << "You Chose 'Destroyer'" << std::endl
+			 << std::endl;
 		//create new instance of vessel and call constructor
-		Destroyer *Destroy = new Destroyer("D", _newSpeed, _newLength, _newRange, _newDisp, _newCrew, _newHeli, _newWep);
-		//pass object to tree insert function
-		returnPtr = Destroy;
-		break;
-	}
+		return new Destroyer(std::cin);
 	case 3:
-	{
-		cout << "You Chose 'Tanker'" << endl
-			 << endl;
-		setBV();
-		setSF();
-		setFleetAux();
-		setTanker();
-		//create new instance of vessel and call constructor
-		Tanker *Tank = new Tanker("T", _newSpeed, _newLength, _newRange, _newDisp, _newCrew, _newHeli, _newDeck, _newCapL);
-		//pass object to tree insert function7
-		returnPtr = Tank;
-		break;
-	}
+		std::cout << "You Chose 'Tanker'" << std::endl
+			 << std::endl;
+		return new Tanker(std::cin);
 	case 4:
-	{
-		cout << "You Chose 'Landing Platform Dock'" << endl
-			 << endl;
-		setBV();
-		setSF();
-		setFleetAux();
-		setLandPlat();
-		//create new instance of vessel and call constructor
-		LandingPlat *LP = new LandingPlat("LP", _newSpeed, _newLength, _newRange, _newDisp, _newCrew, _newHeli, _newDeck, _newCapM3);
-		//pass object to tree insert function
-		returnPtr = LP;
-		break;
-	}
+		std::cout << "You Chose 'Landing Platform Dock'" << std::endl
+			 << std::endl;
+		return new LandingPlat(std::cin);
 	case 5:
-	{
-		cout << "You Chose 'Ballistic Submarine'" << endl
-			 << endl;
-		setBV();
-		setSub();
-		setBSub();
-		//create new instance of vessel and call constructor
-		BallisticSub *BS = new BallisticSub("BS", _newSpeed, _newLength, _newRange, _newDisp, _newCrew, _newDiveDepth, _newSubSpeed, _newSubDisp, _newSLBM);
-		//pass object to tree insert function
-		returnPtr = BS;
-		break;
-	}
+		std::cout << "You Chose 'Ballistic Submarine'" << std::endl
+			 << std::endl;
+		return  new BallisticSub(std::cin);
 	case 6:
-	{
-		cout << "You Chose 'Attack Submarine'" << endl
-			 << endl;
-		setBV();
-		setSub();
-		setASub();
-		//create new instance of vessel and call constructor
-		AttackSub *AS = new AttackSub("AS", _newSpeed, _newLength, _newRange, _newDisp, _newCrew, _newDiveDepth, _newSubSpeed, _newSubDisp, _newTorpedos);
-		//pass object to tree insert function
-		returnPtr = AS;
-		break;
-	}
+		std::cout << "You Chose 'Attack Submarine'" << std::endl
+			 << std::endl;
+		return new AttackSub(std::cin);
 	}
 
-	cout << endl
-		 << "Vessel Written" << endl;
-
-	return returnPtr;
+	return nullptr;
 }
+
 std::string library::setName()
 {
-	cout << "Enter Name: " << endl;
-	cout << "> ";
-	cin >> _newName;
+	std::cout << "Enter Name: " << std::endl;
+	std::cout << "> ";
+	auto newName = std::string("");
+	cin >> newName;
 
-	return _newName; //to make each vessel HMS "something"
+	return newName; //to make each vessel HMS "something"
 }
-void library::setBV()
-{
-	cout << "Enter Speed (Knots): " << endl;
-	cout << ">";
-	_newSpeed = validateCin();
-	cout << "Enter Length (Metres): " << endl;
-	cout << ">";
-	_newLength = validateCin();
-	cout << "Enter Range (Nautical Miles): " << endl;
-	cout << ">";
-	_newRange = validateCin();
-	cout << "Enter Displacement (Tons): " << endl;
-	cout << ">";
-	_newDisp = validateCin();
-	cout << "Enter Crew Size: " << endl;
-	cout << ">";
-	_newCrew = validateCin();
-}
-void library::setSF()
-{
-	cout << "Enter No. Helicopters: " << endl;
-	cout << ">";
-	_newHeli = validateCin();
-}
-void library::setSub()
-{
-	cout << "Enter Dive Depth (Metres): " << endl;
-	cout << ">";
-	_newDiveDepth = validateCin();
-	cout << "Enter Submerged Speed (Knots): " << endl;
-	cout << ">";
-	_newSubSpeed = validateCin();
-	cout << "Enter Submerged Displacement (Tons): " << endl;
-	cout << ">";
-	_newSubDisp = validateCin();
-}
-void library::setFleetAux()
-{
-	cout << "Enter Deck Size (Metres): " << endl;
-	cout << ">";
-	_newDeck = validateCin();
-}
-void library::setAC()
-{
-	cout << "Enter No. Aircraft: " << endl;
-	cout << ">";
-	_newAircraft = validateCin();
-}
-void library::setDestroyer()
-{
-	cout << "Please Select Weapon System: " << endl;
-	cout << "1. Gun System" << endl;
-	cout << "2. Guided Missle System" << endl;
-	cout << ">";
 
-	while (true)
-	{
-		_select = validateCin();
-		if (_select == 1)
-		{
-			_newWep = "Gun System";
-			break;
-		}
-		if (_select == 2)
-		{
-			_newWep = "Guilded Missle System";
-			break;
-		}
-	}
-	cout << endl
-		 << "You Chose: " << _newWep << endl;
-}
-void library::setTanker()
-{
-	cout << "Enter Capacity (Litres): " << endl;
-	cout << ">";
-	_newCapL = validateCin();
-}
-void library::setLandPlat()
-{
-	cout << "Enter Capacity (Cubic Metres): " << endl;
-	cout << ">";
-	_newCapM3 = validateCin();
-}
-void library::setBSub()
-{
-	cout << "Enter No. SLBM: " << endl;
-	cout << ">";
-	_newSLBM = validateCin();
-}
-void library::setASub()
-{
-	cout << "Enter No. Torpedos: " << endl;
-	cout << ">";
-	_newTorpedos = validateCin();
-}
 void library::sizeOfList()
 {
-	cout << "There is/are " << MyList.size() << " Vessels(s) on the System" << endl;
+	std::cout << "There is/are " << MyList.size() << " Vessels(s) on the System" << std::endl;
 	endGraceful();
 }
+
 void library::printVessels()
 {
 	system("CLS");
-	cout << "-Vessel Print-" << endl
-		 << endl;
-	cout << "In which order would you like to print" << endl
-		 << "1. In Order" << endl
-		 << "2. Post Order" << endl
-		 << "3. No Order" << endl
+	std::cout << "-Vessel Print-" << std::endl
+		 << std::endl;
+	std::cout << "In which order would you like to print" << std::endl
+		 << "1. In Order" << std::endl
+		 << "2. Post Order" << std::endl
+		 << "3. No Order" << std::endl
 		 << ">";
 
-	while (true)
+	auto select = 0;
+	for (;;)
 	{
-		_select = validateCin();
-		if ((_select < 1) || (_select > 3))
-			cout << "INCORRECT INPUT" << endl
-				 << endl;
-		else
+		select = validateCin();
+		if ((select < 1) || (select > 3))
 		{
-			MyList.publicPrint(_select);
-			break;
+			std::cout << "INCORRECT INPUT" << std::endl
+				<< std::endl;
+			continue;
 		}
+		break;
 	}
 
-	cout << endl;
-
+	MyList.publicPrint(select);
 	endGraceful();
 }
+
 void library::getVessel()
 {
 	system("CLS");
 
-	cout << "-System Search-" << endl
-		 << endl;
+	std::cout << "-System Search-" << std::endl
+		 << std::endl;
 
-	cout << "How would you like to search" << endl
-		 << "1. By Signature" << endl
-		 << "2. By Name" << endl
+	std::cout << "How would you like to search" << std::endl
+		 << "1. By Signature" << std::endl
+		 << "2. By Name" << std::endl
 		 << ">";
 
-	while (true)
+	auto select = 0;
+	for (;;)
 	{
-		_select = validateCin();
-		if ((_select < 1) || (_select > 2))
-			cout << "INCORRECT INPUT" << endl
-				 << endl;
-		else
-			break;
+		select = validateCin();
+		if ((select < 1) || (select > 2))
+		{
+			std::cout << "INCORRECT INPUT" << std::endl
+				<< std::endl;
+			continue;
+		}
+		break;
 	}
 
-	if (_select == 1)
+	if (select == 1)
 	{
-		cout << "Please Enter an ID:" << endl;
-		cout << ">";
+		std::cout << "Please Enter an ID:" << std::endl;
+		std::cout << ">";
 
-		_select = validateCin();
+		select = validateCin();
 
-		MyList.FindVesselID(_select);
+		MyList.FindVesselID(select);
 
-		cout << endl;
+		std::cout << std::endl;
 	}
 	else
 	{
-		cout << "Please Enter a Name:" << endl;
-		cout << ">";
+		std::cout << "Please Enter a Name:" << std::endl;
+		std::cout << ">";
 
-		cin >> _searchName;
+		auto searchName = std::string("");
+		cin >> searchName;
 
-		MyList.findVesselName(_searchName);
-
-		cout << endl;
+		MyList.findVesselName(searchName);
+		std::cout << std::endl;
 	}
 
 	endGraceful();
@@ -437,108 +282,58 @@ void library::deleteVessel()
 {
 	system("CLS");
 
-	cout << "-Delete Vessel-" << endl
-		 << endl;
+	std::cout << "-Delete Vessel-" << std::endl
+		 << std::endl;
 
-	cout << "Please Enter ID to Delete Vessel" << endl;
-	cout << ">";
+	std::cout << "Please Enter ID to Delete Vessel" << std::endl;
+	std::cout << ">";
 
-	_select = validateCin();
+	auto select = validateCin();
 
-	MyList.deletePublic(_select);
+	MyList.deletePublic(select);
 
-	cout << "Vessel With ID " << _select << " Deleted." << endl;
+	std::cout << "Vessel With ID " << select << " Deleted." << std::endl;
 
 	endGraceful();
 }
+
 void library::streamOut(int _signature, std::string _vesselName, BaseVessel *vesselPtr)
 {
-	cout << endl
-		 << "-Vessel Data-" << endl
-		 << endl;
+	std::cout << std::endl
+		 << "-Vessel Data-" << std::endl
+		 << std::endl;
 
-	cout << "Acoustic Signature: " << _signature << endl
-		 << "Vessel Name: " << _vesselName << endl
-		 << endl
-		 << "Max Speed: " << vesselPtr->getSpeed() << endl
-		 << "Lenght: " << vesselPtr->getLength() << endl
-		 << "Max Range: " << vesselPtr->getRange() << endl
-		 << "Displacement: " << vesselPtr->getDisp() << endl
-		 << "Crew Size: " << vesselPtr->getCrew() << endl
-		 << endl;
+	std::cout << "Acoustic Signature: " << _signature << std::endl;
 
-	printDerivedData(vesselPtr);
+	vesselPtr->Display(std::cout);
 
-	cout << endl;
+	std::cout << std::endl;
 }
-void library::printDerivedData(BaseVessel *vesselPtr)
-{
-	if (vesselPtr->getVesselType() == "AC")
-	{
-		AircraftCarrier *AC = static_cast<AircraftCarrier *>(vesselPtr);
-		cout << "No. Helicopters: " << AC->getHeli() << endl
-			 << "No. Aircraft: " << AC->getCraft() << endl;
-	}
-	if (vesselPtr->getVesselType() == "D")
-	{
-		Destroyer *D = static_cast<Destroyer *>(vesselPtr);
-		cout << "No. Helicopters: " << D->getHeli() << endl
-			 << "Weapon System: " << D->getWep() << endl;
-	}
-	if (vesselPtr->getVesselType() == "T")
-	{
-		Tanker *T = static_cast<Tanker *>(vesselPtr);
-		cout << "No. Helicopters: " << T->getHeli() << endl
-			 << "Desk Size: " << T->getDeck() << endl
-			 << "Capacity in Litres: " << T->getCapL() << endl;
-	}
-	if (vesselPtr->getVesselType() == "LP")
-	{
-		LandingPlat *LP = static_cast<LandingPlat *>(vesselPtr);
-		cout << "No. Helicopters: " << LP->getHeli() << endl
-			 << "Desk Size: " << LP->getDeck() << endl
-			 << "Capcity in Cubic Metres: " << LP->getCapM3() << endl;
-	}
-	if (vesselPtr->getVesselType() == "BS")
-	{
-		BallisticSub *BS = static_cast<BallisticSub *>(vesselPtr);
-		cout << "Maximum Dive Depth: " << BS->getDiveDepth() << endl
-			 << "Maximum Submerged Speed: " << BS->getSubSpeed() << endl
-			 << "Submerged Displacement: " << BS->getSubDisp() << endl
-			 << "No. SLBM: " << BS->getSLBM() << endl;
-	}
-	if (vesselPtr->getVesselType() == "AS")
-	{
-		AttackSub *AS = static_cast<AttackSub *>(vesselPtr);
-		cout << "Maximum Dive Depth: " << AS->getDiveDepth() << endl
-			 << "Maximum Submerged Speed: " << AS->getSubSpeed() << endl
-			 << "Submerged Displacement: " << AS->getSubDisp() << endl
-			 << "No. Torpedos: " << AS->getTorpedos() << endl;
-	}
-}
+
 void library::endGraceful()
 {
-	cout << endl
-		 << "Press any 'y' to return" << endl;
+	std::cout << std::endl
+		 << "Press any 'y' to return" << std::endl;
 
-	_confirm = 'a'; //something that isnt y
+	auto confirm = 'a'; //something that isnt y
 
-	while (_confirm != 'y')
+	while (confirm != 'y')
 	{
-		cin >> _confirm;
+		cin >> confirm;
 	}
 
 	system("CLS");
 }
+
 int library::validateCin()
 {
 	int checkVar;
 	while (!(cin >> checkVar))
 	{
-		cout << "INCORRECT INPUT" << endl;
+		std::cout << "INCORRECT INPUT" << std::endl;
 		cin.clear();
 		cin.ignore(numeric_limits<streamsize>::max(), '\n');
-		cout << ">" << endl;
+		std::cout << ">" << std::endl;
 	}
 	return checkVar;
 }

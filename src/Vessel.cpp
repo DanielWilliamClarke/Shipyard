@@ -1,125 +1,182 @@
-// File: Vessel.cpp
-// Version: V1.1 
-// Date: 04/04/2012
-// Name: Daniel Clarke - Computer Science 
-// ID: n0271538
-// This program contains the parameterised constructors for the bass class BaseVessel and all of it derived classes, as well as the getter functions for each classes private data memebers
-// Modification history: 
-// V1.1 4/4/2012
-
 #include "Vessel.h"
-BaseVessel::BaseVessel(std::string vesselType, unsigned int newSpeed, unsigned int newLength, unsigned int newRange, unsigned int newDisp, unsigned int newCrew)
+
+BaseVessel::BaseVessel(std::istream& inStream)
 {
-	_vesselType = vesselType;
-	_speed = newSpeed;
-	_length = newLength;
-	_maxRange = newRange;
-	_displacement = newDisp;
-	_crewCompliment = newCrew;
+	std::cout << "Enter Name: " << std::endl;
+	std::cout << ">";
+	inStream >> name;	
+	std::cout << "Enter Speed (Knots): " << std::endl;
+	std::cout << ">";
+	inStream >> speed;
+	std::cout << "Enter Length (Metres): " << std::endl;
+	std::cout << ">";
+	inStream >> length;
+	std::cout << "Enter Range (Nautical Miles): " << std::endl;
+	std::cout << ">";
+	inStream >> maxRange;
+	std::cout << "Enter Displacement (Tons): " << std::endl;
+	std::cout << ">";
+	inStream >> displacement;
+	std::cout << "Enter Crew Size: " << std::endl;
+	std::cout << ">";
+	inStream >> crewCompliment;
 }
-SurfaceVessel::SurfaceVessel(std::string vesselType, unsigned int newSpeed, unsigned int newLength, unsigned int newRange, unsigned int newDisp, unsigned int newCrew, unsigned int newHeli) : BaseVessel(vesselType, newSpeed, newLength, newRange, newDisp, newCrew)
+
+void BaseVessel::Display(std::ostream& outStream) const
 {
-	_numHelicopter = newHeli;
+	outStream << std::endl
+		<< "-Vessel Data-" << std::endl
+		<< std::endl;
+
+	outStream << "Vessel Name: " << name << std::endl
+		<< std::endl
+		<< "Max Speed: " << speed << std::endl
+		<< "Lenght: " << length << std::endl
+		<< "Max Range: " << maxRange << std::endl
+		<< "Displacement: " << displacement << std::endl
+		<< "Crew Size: " << crewCompliment << std::endl
+		<< std::endl;
 }
-AircraftCarrier::AircraftCarrier(std::string vesselType, unsigned int newSpeed, unsigned int newLength, unsigned int newRange, unsigned int newDisp, unsigned int newCrew, unsigned int newHeli, unsigned int newAircraft) : SurfaceVessel(vesselType, newSpeed, newLength, newRange, newDisp, newCrew, newHeli)
+
+SurfaceVessel::SurfaceVessel(std::istream& inStream) 
+	: BaseVessel(inStream)
 {
-	_numAircraft = newAircraft;
+	std::cout << "Enter No. Helicopters: " << std::endl;
+	std::cout << ">";
+	inStream >> numHelicopter;
 }
-Destroyer::Destroyer(std::string vesselType, unsigned int newSpeed, unsigned int newLength, unsigned int newRange, unsigned int newDisp, unsigned int newCrew, unsigned int newHeli, std::string newWep) : SurfaceVessel(vesselType, newSpeed, newLength, newRange, newDisp, newCrew, newHeli)
+
+void SurfaceVessel::Display(std::ostream& outStream) const
 {
-	_wepSystem = newWep;
+	BaseVessel::Display(outStream);
+
+	outStream << "No. Helicopters: " << numHelicopter << std::endl;
 }
-FleetAuxiliary::FleetAuxiliary(std::string vesselType, unsigned int newSpeed, unsigned int newLength, unsigned int newRange, unsigned int newDisp, unsigned int newCrew, unsigned int newHeli, unsigned int newDeck) : SurfaceVessel(vesselType, newSpeed, newLength, newRange, newDisp, newCrew, newHeli)
+
+AircraftCarrier::AircraftCarrier(std::istream& inStream)
+	: SurfaceVessel(inStream)
 {
-	_deckSpace = newDeck;
+	std::cout << "Enter No. Aircraft: " << std::endl;
+	std::cout << ">";
+	inStream >> numAircraft;
 }
-Tanker::Tanker(std::string vesselType, unsigned int newSpeed, unsigned int newLength, unsigned int newRange, unsigned int newDisp, unsigned int newCrew, unsigned int newHeli, unsigned int newDeck, unsigned int newCap) : FleetAuxiliary(vesselType, newSpeed, newLength, newRange, newDisp, newCrew, newHeli, newDeck)
+
+void AircraftCarrier::Display(std::ostream& outStream) const
 {
-	_capacity = newCap;
+	SurfaceVessel::Display(outStream);
+
+	outStream << "No. Aircraft: " << numAircraft << std::endl;
 }
-LandingPlat::LandingPlat(std::string vesselType, unsigned int newSpeed, unsigned int newLength, unsigned int newRange, unsigned int newDisp, unsigned int newCrew, unsigned int newHeli, unsigned int newDeck, unsigned int newCap) :  FleetAuxiliary(vesselType, newSpeed, newLength, newRange, newDisp, newCrew, newHeli, newDeck)
+
+Destroyer::Destroyer(std::istream& inStream)
+	: SurfaceVessel(inStream)
 {
-	_capacity = newCap;
+	std::cout << "Enter Weapon System: " << std::endl;
+	std::cout << ">";
+	inStream >> wepSystem;
 }
-Submarine::Submarine(std::string vesselType, unsigned int newSpeed, unsigned int newLength, unsigned int newRange, unsigned int newDisp, unsigned int newCrew, unsigned int maxDepth, unsigned int maxSpeed, unsigned int newSubDisp) : BaseVessel(vesselType, newSpeed, newLength, newRange, newDisp, newCrew)
+
+void Destroyer::Display(std::ostream& outStream) const
 {
-	_maxDiveDepth = maxDepth;
-	_maxSubSpeed = maxSpeed;
-	_subDisplacement = newSubDisp;
+	SurfaceVessel::Display(outStream);
+
+	outStream << "Weapon System: " << wepSystem << std::endl;
 }
-BallisticSub::BallisticSub(std::string vesselType, unsigned int newSpeed, unsigned int newLength, unsigned int newRange, unsigned int newDisp, unsigned int newCrew, unsigned int maxDepth, unsigned int maxSpeed, unsigned int newSubDisp, unsigned int newSLBM) : Submarine(vesselType, newSpeed, newLength, newRange, newDisp, newCrew, maxDepth, maxSpeed, newSubDisp)
+
+FleetAuxiliary::FleetAuxiliary(std::istream& inStream)
+	: SurfaceVessel(inStream)
 {
-	_numSLBM = newSLBM;
+	std::cout << "Enter Deck Space (Metres): " << std::endl;
+	std::cout << ">";
+	inStream >> deckSpace;
 }
-AttackSub::AttackSub(std::string vesselType, unsigned int newSpeed, unsigned int newLength, unsigned int newRange, unsigned int newDisp, unsigned int newCrew, unsigned int maxDepth, unsigned int maxSpeed, unsigned int newSubDisp, unsigned int newTorpedo) : Submarine(vesselType, newSpeed, newLength, newRange, newDisp, newCrew, maxDepth, maxSpeed, newSubDisp)
+
+void FleetAuxiliary::Display(std::ostream& outStream) const
 {
-	_numTorpedos = newTorpedo;
+	SurfaceVessel::Display(outStream);
+
+	outStream << "Deck Space (Metres): " << deckSpace << std::endl;
 }
-std::string BaseVessel::getVesselType()
+
+Tanker::Tanker(std::istream& inStream)
+	: FleetAuxiliary(inStream)
 {
-	return _vesselType;
+	std::cout << "Enter Capacity (Litres): " << std::endl;
+	std::cout << ">";
+	inStream >> capacity;
 }
-unsigned int BaseVessel::getSpeed()
+
+void Tanker::Display(std::ostream& outStream) const
 {
-	return _speed;
+	FleetAuxiliary::Display(outStream);
+
+	outStream << "Capacity (Litres): " << capacity << std::endl;
 }
-unsigned int BaseVessel::getLength()
+
+LandingPlat::LandingPlat(std::istream& inStream)
+	: FleetAuxiliary(inStream)
 {
-	return _length;
+	std::cout << "Enter Capacity (Cubic Metres): " << std::endl;
+	std::cout << ">";
+	inStream >> capacity;
 }
-unsigned int BaseVessel::getRange()
+
+void LandingPlat::Display(std::ostream& outStream) const
 {
-	return _maxRange;
+	FleetAuxiliary::Display(outStream);
+
+	outStream << "Capacity (Cubic Metres): " << capacity << std::endl;
 }
-unsigned int BaseVessel::getDisp()
+
+Submarine::Submarine(std::istream& inStream) 
+	: BaseVessel(inStream)
 {
-	return _displacement;
+	std::cout << "Enter Max Dive Depth (Metres): " << std::endl;
+	std::cout << ">";
+	inStream >> maxDiveDepth;
+	std::cout << "Enter Max Speed (Knots): " << std::endl;
+	std::cout << ">";
+	inStream >> maxSubSpeed;
+	std::cout << "Enter Displacement (Tons): " << std::endl;
+	std::cout << ">";
+	inStream >> subDisplacement;
 }
-unsigned int BaseVessel::getCrew()
+
+void Submarine::Display(std::ostream& outStream) const
 {
-	return _crewCompliment;
+	BaseVessel::Display(outStream);
+
+	outStream << "Max Dive Depth (Metres): " << maxDiveDepth << std::endl
+		<< "Max Speed (Knots): " << maxSubSpeed << std::endl
+		<< "Displacement (Tons): " << subDisplacement << std::endl;
 }
-unsigned int SurfaceVessel::getHeli()
+
+BallisticSub::BallisticSub(std::istream& inStream)
+	: Submarine(inStream)
 {
-	return _numHelicopter;
+	std::cout << "Enter No. Missles: " << std::endl;
+	std::cout << ">";
+	inStream >> numSLBM;
 }
-unsigned int AircraftCarrier::getCraft()
+
+void BallisticSub::Display(std::ostream& outStream) const
 {
-	return _numAircraft;
+	Submarine::Display(outStream);
+
+	outStream << " No. Missles:  " << numSLBM << std::endl;
 }
-std::string Destroyer::getWep()
+
+AttackSub::AttackSub(std::istream& inStream)
+	: Submarine(inStream)
 {
-	return _wepSystem;
+	std::cout << "Enter No. Torpedos: " << std::endl;
+	std::cout << ">";
+	inStream >> numTorpedos;
 }
-unsigned int FleetAuxiliary::getDeck()
+
+void AttackSub::Display(std::ostream& outStream) const
 {
-	return _deckSpace;
-}
-unsigned int Tanker::getCapL()
-{
-	return _capacity;
-}
-unsigned int LandingPlat::getCapM3()
-{
-	return _capacity;
-}
-unsigned int Submarine::getDiveDepth()
-{
-	return _maxDiveDepth;
-}
-unsigned int Submarine::getSubSpeed()
-{
-	return _maxSubSpeed;
-}
-unsigned int Submarine::getSubDisp()
-{
-	return _subDisplacement;
-}
-unsigned int BallisticSub::getSLBM()
-{
-	return _numSLBM;
-}
-unsigned int AttackSub::getTorpedos()
-{
-	return _numTorpedos;
+	Submarine::Display(outStream);
+
+	outStream << " No. Torpedos:  " << numTorpedos << std::endl;
 }
