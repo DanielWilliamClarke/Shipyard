@@ -38,6 +38,11 @@ void BaseVessel::Display(std::ostream& outStream) const
 		<< std::endl;
 }
 
+const std::string BaseVessel::GetName() const
+{
+	return name;
+}
+
 SurfaceVessel::SurfaceVessel(std::istream& inStream) 
 	: BaseVessel(inStream)
 {

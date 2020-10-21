@@ -1,80 +1,68 @@
-// File: Node.cpp
-// Version: V1.1 
-// Date: 04/04/2012
-// Name: Daniel Clarke - Computer Science 
-// ID: n0271538
-// This program hold the setter and getter functions for the private data members held with in the class Node
-// Modification history: 
-// V1.1 4/4/2012
-
 #include "Node.h"
-#include <time.h>
+#include "Vessel.h"
 
-Node::Node()
+Node::Node(int key, BaseVessel* vessel, Node* parent)
+	: key(key), vessel(vessel), parent(parent), left(nullptr), right(nullptr), colour(false)
 {
-	//initialise the left and right node pointers
-	_nextLeft = NULL;
-	_nextRight = NULL;
-	_parent = NULL;
 }
+
 //getters and setters
-int Node::generateKey()
+int Node::GenerateKey()
 {
 	return rand() % 9999;
 }
-void Node::setKey(int newKey)
+
+int Node::GetKey() const
 {
-	_key = newKey;
+	return key;
 }
-int Node::getKey()
+
+void Node::SetVessel(BaseVessel* v)
 {
-	return _key;
+	vessel = v;
 }
-void Node::setVesselName(std::string newName)
+
+BaseVessel* Node::GetVessel() const
 {
-	_vesselName = newName;
+	return vessel;
 }
-std::string Node::getVesselName()
+
+void Node::SetParent(Node *p)
 {
-	return _vesselName;
+	parent = p;
 }
-void Node::setVesselPtr(BaseVessel *newVesselPtr)
+
+Node* Node::GetParent() const
 {
-	_vesselPtr = newVesselPtr;
+	return parent;
 }
-BaseVessel* Node::getVesselPtr()
+
+void Node::SetNextLeft(Node *l)
 {
-	return _vesselPtr;
+	left = l;
 }
-void Node::setParent(Node *ptr)
+
+Node* Node::GetNextLeft() const
 {
-	_parent = ptr;
+	return left;
 }
-Node* Node::getParent()
+
+void Node::SetNextRight(Node *ptr)
 {
-	return _parent;
+	right = ptr;
 }
-void Node::setNextLeft(Node *ptr)
+
+Node* Node::GetNextRight() const
 {
-	_nextLeft = ptr;
+	return right;
 }
-Node* Node::getNextLeft(void)
+
+void Node::SetColour(bool c)
 {
-	return _nextLeft;
+	colour = c;
 }
-void Node::setNextRight(Node *ptr)
+
+bool Node::GetColour() const
 {
-	_nextRight = ptr;
-}
-Node* Node::getNextRight(void)
-{
-	return _nextRight;
-}
-void Node::setColour(bool newColour)
-{
-	_Colour = newColour;
-}
-bool Node::getColour(void)
-{
-	return _Colour;
+	return colour;
 }

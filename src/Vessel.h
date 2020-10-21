@@ -17,6 +17,7 @@ protected:
 public:
 	BaseVessel(std::istream& inStream);
 	virtual void Display(std::ostream& outStream) const;
+	const std::string GetName() const;
 };
 
 //derived classes

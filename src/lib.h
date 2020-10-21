@@ -1,43 +1,32 @@
 #pragma once
 
 #include <string>
+#include <memory>
 
 class Node;
 class BaseVessel;
+class BinaryTree;
 
-class library
+class Library
 {
 public:
+	Library(std::shared_ptr<BinaryTree> tree);
 
-	//hydrophone function set up and finish
-	void hydrophoneSim();
-	void Percent(Node* node, double percentage);
+	void InsertVessel() const;
+	void DeleteVessel() const;
+	void GetVessel() const;
+	void SelectEditVessel() const;
+	void SizeOfList() const;
+	void PrintVessels() const;
+	void HydrophoneSim() const;
+	void EndGraceful() const;
+private: 
+	void StreamOut(int key, std::string vesselName, BaseVessel* vesselPtr) const;
+	BaseVessel* FillVesselPtr() const;
+	std::string SetName() const;
+	int ValidateCin() const;
+	void Percent(Node* node, double percentage) const;
 
-	//insert and edit functions
-	void insertVessel();
-	void selectEditVessel();
-	BaseVessel* fillVesselPtr();
-	
-	std::string setName();
-
-	void sizeOfList();
-
-	//printing functions
-	void printVessels();
-	void streamOut(int key, std::string vesselName, BaseVessel* vesselPtr);
-
-	//get by name or signature
-	void getVessel();
-	
-	//delete vessel by signature
-	void deleteVessel();
-
-	//formatting and input validation functions
-	void endGraceful();
-	int validateCin();
-
-	//TO DO 
-	//XML SAVING
-	//GUI
-
+private:
+	std::shared_ptr<BinaryTree> tree;
 };
