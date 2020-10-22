@@ -13,6 +13,12 @@ class Library
 public:
 	Library(std::shared_ptr<BinaryTree> tree);
 
+	template<class KEY, class OPTION, class DATA>
+	void PrintOptions(std::string title, std::map<KEY, std::pair<OPTION, DATA>> options) const;
+
+	template<class KEY, class OPTION, class DATA>
+	DATA MakeSelection(std::map<KEY, std::pair<OPTION, DATA>> options) const;
+
 	void InsertVessel() const;
 	void DeleteVessel() const;
 	void GetVessel() const;
@@ -22,12 +28,6 @@ public:
 	void Hydrophone() const;
 	void EndGraceful() const;
 private: 
-
-	template<class KEY, class OPTION, class DATA>
-	void PrintOptions(std::string title, std::map<KEY, std::pair<OPTION, DATA>> options) const;
-
-	template<class KEY, class OPTION, class DATA>
-	DATA MakeSelection(std::map<KEY, std::pair<OPTION, DATA>> options) const;
 
 	BaseVessel* FillVessel() const;
 	void StreamOut(int key, BaseVessel* vesselPtr) const;

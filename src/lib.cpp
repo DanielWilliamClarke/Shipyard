@@ -1,9 +1,6 @@
-#include <stdlib.h>
 #include <iostream>
-#include <fstream>
 #include <iomanip>
 #include <limits>
-#include <time.h>
 #include <map>
 #include <functional>
 #include <algorithm>

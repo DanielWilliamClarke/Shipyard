@@ -1,14 +1,7 @@
 #pragma once
-#include <exception>
+
 #include <string>
 #include <functional>
-
-#define ERRORMSG "No Elements"
-#define UNFOUND "Not Found"
-#define NAMEFIND "End Search"
-#define DUPLICATE "Item already in table"
-#define EMPTY "Table is now Empty"
-#define CLOSEST "End Closest Match"
 
 class Node;
 class BaseVessel;

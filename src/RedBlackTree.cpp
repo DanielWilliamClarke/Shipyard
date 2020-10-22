@@ -1,20 +1,15 @@
-// File: RedBlackTree.cpp
-// Version: V1.1
-// Date: 04/04/2012
-// Name: Daniel Clarke - Computer Science
-// ID: n0271538
-// This program contains functions which manipulate the pointers used in the Red Black Tree, it also contains the implementation functions for tree balancing.
-// Modification history:
-// V1.1 4/4/2012
+#include <map>
 
 #include "RedBlackTree.h"
 #include "Node.h"
-#include "lib.h"
 #include "Vessel.h"
 
-#include <typeinfo>
-#include <string>
-#include <map>
+#define ERRORMSG "No Elements"
+#define UNFOUND "Not Found"
+#define NAMEFIND "End Search"
+#define DUPLICATE "Item already in table"
+#define EMPTY "Table is now Empty"
+#define CLOSEST "End Closest Match"
 
 BinaryTree::BinaryTree()
 	: root(nullptr), totalElements(0)
