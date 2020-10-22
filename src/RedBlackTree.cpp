@@ -34,13 +34,13 @@ void BinaryTree::Delete(int selectID)
 	DeleteNode(selectID);
 }
 
-void BinaryTree::Print(BinaryTree::PRINTMODE printSelect, std::function<void(Node*)> callback)
+void BinaryTree::Traverse(BinaryTree::TRAVERSAL_ALGO algo, std::function<void(Node*)> callback)
 {
-	std::map<BinaryTree::PRINTMODE, std::function<void(Node*)>>{
-		{ BinaryTree::PRINTMODE::ASC, [&](Node* root) { this->InOrderPrint(root, callback); } },
-		{ BinaryTree::PRINTMODE::DESC, [&](Node* root) {this->PostOrderPrint(root, callback); } },
-		{ BinaryTree::PRINTMODE::NON, [&](Node* root) {this->NoOrderPrint(root, callback); } },
-	} [printSelect] (FindRoot(root));
+	std::map<BinaryTree::TRAVERSAL_ALGO, std::function<void(Node*)>>{
+		{ BinaryTree::TRAVERSAL_ALGO::INORDER, [&](Node* root) { this->InOrderTraversal(root, callback); } },
+		{ BinaryTree::TRAVERSAL_ALGO::REVERSE, [&](Node* root) { this->PostOrderTraversal(root, callback); } },
+		{ BinaryTree::TRAVERSAL_ALGO::TOPDOWN, [&](Node* root) { this->NoOrderTraversal(root, callback); } },
+	} [algo] (FindRoot(root));
 }
 
 void BinaryTree::EditNode(int key, BaseVessel* vesselPtr)
@@ -176,33 +176,33 @@ Node *BinaryTree::FindByName(Node *node, std::string findName)
 	return nullptr;
 }
 
-void BinaryTree::InOrderPrint(Node *node, std::function<void(Node*)> callback)
+void BinaryTree::InOrderTraversal(Node *node, std::function<void(Node*)> callback)
 {
 	if (node != NULL)
 	{
-		InOrderPrint(node->GetNextLeft(), callback);
+		InOrderTraversal(node->GetNextLeft(), callback);
 		callback(node);
-		InOrderPrint(node->GetNextRight(), callback);
+		InOrderTraversal(node->GetNextRight(), callback);
 	}
 }
 
-void BinaryTree::PostOrderPrint(Node *node, std::function<void(Node*)> callback)
+void BinaryTree::PostOrderTraversal(Node *node, std::function<void(Node*)> callback)
 {
 	if (node != NULL)
 	{
-		PostOrderPrint(node->GetNextRight(), callback);
+		PostOrderTraversal(node->GetNextRight(), callback);
 		callback(node);
-		PostOrderPrint(node->GetNextLeft(), callback);
+		PostOrderTraversal(node->GetNextLeft(), callback);
 	}
 }
 
-void BinaryTree::NoOrderPrint(Node *node, std::function<void(Node*)> callback)
+void BinaryTree::NoOrderTraversal(Node *node, std::function<void(Node*)> callback)
 {
 	if (node != NULL)
 	{
 		callback(node);
-		NoOrderPrint(node->GetNextLeft(), callback);
-		NoOrderPrint(node->GetNextRight(), callback);
+		NoOrderTraversal(node->GetNextLeft(), callback);
+		NoOrderTraversal(node->GetNextRight(), callback);
 	}
 }
 

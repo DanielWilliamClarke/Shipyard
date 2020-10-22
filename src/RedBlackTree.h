@@ -11,15 +11,15 @@ class BinaryTree
 public:
 	BinaryTree();
 
-	enum class PRINTMODE {
-		ASC,
-		DESC,
-		NON
+	enum class TRAVERSAL_ALGO {
+		INORDER,
+		REVERSE,
+		TOPDOWN
 	};
 
 	void Insert(int key, BaseVessel* vessel); 
 	void Delete(int key);
-	void Print(PRINTMODE option, std::function<void(Node*)> callback);
+	void Traverse(TRAVERSAL_ALGO algo, std::function<void(Node*)> callback);
 	void EditNode(int key, BaseVessel* vessel);
 	Node* FindVessel(int key);
 	Node* FindVessel(std::string name);
@@ -59,9 +59,9 @@ private:
 	Node* FindByName(Node* node, std::string name);
 	std::pair<Node*, float> FindClosestMatch(Node* node, std::pair<Node*, float> closest, int key);
 
-	void InOrderPrint(Node* node, std::function<void(Node*)> callback);
-	void PostOrderPrint(Node* node, std::function<void(Node*)> callback);
-	void NoOrderPrint(Node* node, std::function<void(Node*)> callback);
+	void InOrderTraversal(Node* node, std::function<void(Node*)> callback);
+	void PostOrderTraversal(Node* node, std::function<void(Node*)> callback);
+	void NoOrderTraversal(Node* node, std::function<void(Node*)> callback);
 private:
 	Node* root;
 	int totalElements;

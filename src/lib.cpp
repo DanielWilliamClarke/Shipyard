@@ -50,16 +50,16 @@ void Library::Size() const
 
 void Library::PrintVessels() const
 {
-	std::map<int, std::pair<std::string, BinaryTree::PRINTMODE>> options {
-		{ 1, std::make_pair("In Order", BinaryTree::PRINTMODE::ASC) },
-		{ 2, std::make_pair("Post Order", BinaryTree::PRINTMODE::DESC) },
-		{ 3, std::make_pair("No Order", BinaryTree::PRINTMODE::NON) },
+	std::map<int, std::pair<std::string, BinaryTree::TRAVERSAL_ALGO>> options {
+		{ 1, std::make_pair("In Order", BinaryTree::TRAVERSAL_ALGO::INORDER) },
+		{ 2, std::make_pair("Reverse", BinaryTree::TRAVERSAL_ALGO::REVERSE) },
+		{ 3, std::make_pair("No Order", BinaryTree::TRAVERSAL_ALGO::TOPDOWN) },
 	};
 
-	PrintOptions<int, std::string, BinaryTree::PRINTMODE>("-Print Vessels-", options);
+	PrintOptions<int, std::string, BinaryTree::TRAVERSAL_ALGO>("-Print Vessels-", options);
 
-	this->tree->Print(
-		MakeSelection<int, std::string, BinaryTree::PRINTMODE>(options),
+	this->tree->Traverse(
+		MakeSelection<int, std::string, BinaryTree::TRAVERSAL_ALGO>(options),
 		[=](Node* node) {
 			StreamOut(node->GetKey(), node->GetVessel());
 		});
