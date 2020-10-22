@@ -18,15 +18,15 @@ BinaryTree::BinaryTree()
 
 // Public
 
-void BinaryTree::Insert(int key, BaseVessel* vessel)
+void BinaryTree::Insert(int key, Node* node)
 {
 	totalElements++;
 	if (root != NULL)
 	{
-		InsertNode(FindRoot(root), key, vessel);
+		InsertNode(FindRoot(root), node);
 		return;
 	}
-	root = new Node(key, vessel);
+	root = node;
 }
 
 void BinaryTree::Delete(int selectID)
@@ -41,11 +41,6 @@ void BinaryTree::Traverse(BinaryTree::TRAVERSAL_ALGO algo, std::function<void(No
 		{ BinaryTree::TRAVERSAL_ALGO::REVERSE, [&](Node* root) { this->PostOrderTraversal(root, callback); } },
 		{ BinaryTree::TRAVERSAL_ALGO::TOPDOWN, [&](Node* root) { this->NoOrderTraversal(root, callback); } },
 	} [algo] (FindRoot(root));
-}
-
-void BinaryTree::EditNode(int key, BaseVessel* vesselPtr)
-{
-	Find(FindRoot(root), key)->SetVessel(vesselPtr);
 }
 
 Node* BinaryTree::FindVessel(int idFind)
@@ -70,22 +65,22 @@ int BinaryTree::Size()
 
 // Private
 
-void BinaryTree::InsertNode(Node* node, int key, BaseVessel* vessel)
+void BinaryTree::InsertNode(Node* node, Node* newNode)
 {
-	if (key == node->GetKey())
+	if (newNode->GetKey() == node->GetKey())
 	{
 		throw std::exception(DUPLICATE);
 	}		
 
-	if (key < node->GetKey()) //compare key in tree
+	if (newNode->GetKey() < node->GetKey()) //compare key in tree
 	{
 		if (node->GetNextLeft() != NULL)
 		{
-			InsertNode(node->GetNextLeft(), key, vessel);
+			InsertNode(node->GetNextLeft(), newNode);
 		}
 		else
 		{
-			node->SetNextLeft(new Node(key, vessel, node));
+			node->SetNextLeft(newNode);
 			totalElements++;
 		}
 	}
@@ -93,14 +88,16 @@ void BinaryTree::InsertNode(Node* node, int key, BaseVessel* vessel)
 	{
 		if (node->GetNextRight() != NULL)
 		{
-			InsertNode(node->GetNextRight(), key, vessel);
+			InsertNode(node->GetNextRight(), newNode);
 		}
 		else
 		{
-			node->SetNextRight(new Node(key, vessel, node));
+			node->SetNextRight(newNode);
 			totalElements++;
 		}
 	}
+
+	newNode->SetParent(node);
 
 	InsertCase1(node); // get the red black rolling on node Inserted to tree
 }

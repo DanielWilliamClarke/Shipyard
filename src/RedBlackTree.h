@@ -17,17 +17,16 @@ public:
 		TOPDOWN
 	};
 
-	void Insert(int key, BaseVessel* vessel); 
+	void Insert(int key, Node* node); 
 	void Delete(int key);
 	void Traverse(TRAVERSAL_ALGO algo, std::function<void(Node*)> callback);
-	void EditNode(int key, BaseVessel* vessel);
 	Node* FindVessel(int key);
 	Node* FindVessel(std::string name);
 	std::pair<Node*, float> FindClosest(int key);
 	int Size();
 	
 private:
-	void InsertNode(Node* node, int key, BaseVessel* vessel); //private function
+	void InsertNode(Node* node, Node* newNode); //private function
 	//Insertion Cases
 	void InsertCase1(Node* node);
 	void InsertCase2(Node* node);

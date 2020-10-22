@@ -22,7 +22,11 @@ void Library::InsertVessel() const
 	std::cout << "-Insert Vessel-" << std::endl
 		<< std::endl << "Vessel's Acoustic Signature: " << signature << std::endl;
 
-	this->tree->Insert(signature, FillVessel());
+	this->tree->Insert(signature, new Node(signature,FillVessel(), nullptr));
+
+	auto node = this->tree->FindVessel(signature);
+	StreamOut(node->GetKey(), node->GetVessel());
+
 	EndGraceful();
 }
 
@@ -70,12 +74,11 @@ void Library::PrintVessels() const
 void Library::SelectEditVessel() const
 {
 	system("CLS");
-	std::cout << "Enter an ID to edit" << std::endl << ">";
-	auto keyToFind = ValidateCin();
-
 	std::map<int, std::pair<std::string, std::function<void(void)>>> options{
 		{1, std::make_pair("Vessel Data", [&](void) -> void { 
-			this->tree->EditNode(keyToFind, nullptr);
+			std::cout << "Enter an ID to edit" << std::endl << ">";
+			auto node = this->tree->FindVessel(ValidateCin());
+			node->SetVessel(FillVessel());
 		})},
 	};
 
@@ -180,9 +183,7 @@ DATA Library::MakeSelection(std::map<KEY, std::pair<OPTION, DATA>> options) cons
 	int selection = 0;
 
 	for (;;) {
-		std::cout << std::endl
-			<< "Please Enter a Selection" << std::endl
-			<< ">";
+		std::cout << std::endl << ">";
 		selection = ValidateCin();
 
 		if (options.find(selection) == options.end())
