@@ -4,7 +4,6 @@
 #include <functional>
 
 class Node;
-class BaseVessel;
 
 class BinaryTree
 {
