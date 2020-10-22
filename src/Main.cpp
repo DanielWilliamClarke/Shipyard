@@ -36,8 +36,7 @@ int main()
 	};
 
 	srand((unsigned)time(NULL));
-	int selection = 0;
-	while (selection != 8)
+	for(;;)
 	{
 		std::cout << "Welcome" << std::endl;
 		lib->PrintOptions<int, std::string, std::function<void(void)>>("What would you like to do?", options);
