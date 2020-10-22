@@ -14,34 +14,75 @@
 
 #include <typeinfo>
 #include <string>
-
-using namespace std;
+#include <map>
 
 BinaryTree::BinaryTree()
+	: root(nullptr), totalElements(0)
 {
-	root = NULL;
-	foundFlag = false;
 }
+
+// Public
 
 void BinaryTree::Insert(int key, BaseVessel* vessel)
 {
+	totalElements++;
 	if (root != NULL)
 	{
 		InsertNode(FindRoot(root), key, vessel);
 		return;
 	}
 	root = new Node(key, vessel);
-	element++;
 }
+
+void BinaryTree::Delete(int selectID)
+{
+	DeleteNode(selectID);
+}
+
+void BinaryTree::Print(BinaryTree::PRINTMODE printSelect, std::function<void(Node*)> callback)
+{
+	std::map<BinaryTree::PRINTMODE, std::function<void(Node*)>>{
+		{ BinaryTree::PRINTMODE::ASC, [&](Node* root) { this->InOrderPrint(root, callback); } },
+		{ BinaryTree::PRINTMODE::DESC, [&](Node* root) {this->PostOrderPrint(root, callback); } },
+		{ BinaryTree::PRINTMODE::NON, [&](Node* root) {this->NoOrderPrint(root, callback); } },
+	} [printSelect] (FindRoot(root));
+}
+
+void BinaryTree::EditNode(int key, BaseVessel* vesselPtr)
+{
+	Find(FindRoot(root), key)->SetVessel(vesselPtr);
+}
+
+Node* BinaryTree::FindVessel(int idFind)
+{
+	return Find(FindRoot(root), idFind);
+}
+
+Node* BinaryTree::FindVessel(std::string findName)
+{
+	return FindByName(FindRoot(root), findName);
+}
+
+std::pair<Node*, float> BinaryTree::FindClosest(int key)
+{
+	return FindClosestMatch(FindRoot(root), std::make_pair(nullptr, 0.0f),  key);
+}
+
+int BinaryTree::Size()
+{
+	return totalElements;
+}
+
+// Private
 
 void BinaryTree::InsertNode(Node* node, int key, BaseVessel* vessel)
 {
 	if (key == node->GetKey())
 	{
-		throw exception(DUPLICATE);
+		throw std::exception(DUPLICATE);
 	}		
 
-	if (node->GetKey() > key) //compare key in tree
+	if (key < node->GetKey()) //compare key in tree
 	{
 		if (node->GetNextLeft() != NULL)
 		{
@@ -50,7 +91,7 @@ void BinaryTree::InsertNode(Node* node, int key, BaseVessel* vessel)
 		else
 		{
 			node->SetNextLeft(new Node(key, vessel, node));
-			element++;
+			totalElements++;
 		}
 	}
 	else
@@ -62,177 +103,112 @@ void BinaryTree::InsertNode(Node* node, int key, BaseVessel* vessel)
 		else
 		{
 			node->SetNextRight(new Node(key, vessel, node));
-			element++;
+			totalElements++;
 		}
 	}
 
 	InsertCase1(node); // get the red black rolling on node Inserted to tree
 }
 
-void BinaryTree::EditNode(int key, BaseVessel* vesselPtr)
-{
-	Find(FindRoot(root), key)->SetVessel(vesselPtr);
-}
-
-int BinaryTree::Size()
-{
-	if (element != 0)
-	{
-		return element;
-	}
-	throw exception(ERRORMSG);
-}
-
-Node *BinaryTree::Find(Node *node, int idFind)
+Node *BinaryTree::Find(Node *node, int key)
 {
 	if (node == NULL)
 	{
-		throw exception(UNFOUND);
+		throw std::exception(UNFOUND);
 	}
 	
-	if (node->GetKey() == idFind)
+	if (node->GetKey() == key)
 	{
 		return node;
 	}
 
-	if (node->GetKey() < idFind)
+	if (key < node->GetKey())
 	{
-		return Find(node->GetNextRight(), idFind);
+		return Find(node->GetNextLeft(), key);
 	}
-	return Find(node->GetNextLeft(), idFind);
+	return Find(node->GetNextRight(), key);
 }
 
-Node *BinaryTree::FindClosestMatch(Node *node, int idFind)
+std::pair<Node*, float> BinaryTree::FindClosestMatch(Node *node, std::pair<Node*, float> closest, int key)
 {
-	if (node == NULL && closestNode != NULL)
+	if (node == NULL)
 	{
-		//stream.Percent(closestNode, percentage);
-		max = 0;
-		closestNode = NULL;
-		throw exception(CLOSEST);
+		return closest;
 	}
 
-	if (node->GetKey() == idFind)
+	if (node->GetKey() == key)
 	{
-		return node;
+		return std::make_pair(node, 1.0f);
 	}
 
-	if (node->GetKey() < idFind)
+	if (key < node->GetKey())
 	{
-		percentageP1 = (double)node->GetKey() / (double)idFind;
-		percentage = percentageP1 * 100;
-
-		if (percentage > max)
+		auto percentage = (float)node->GetKey() / (float)key;
+		if (percentage > closest.second)
 		{
-			max = percentage;
-			closestNode = node;
+			closest.first = node;
+			closest.second = percentage;
 		}
 
-		return FindClosestMatch(node->GetNextLeft(), idFind);
+		return FindClosestMatch(node->GetNextLeft(), closest, key);
 	}
 
-	percentageP1 = (double)idFind / (double)node->GetKey();
-	percentage = percentageP1 * 100;
-
-	if (percentage > max)
+	auto percentage = (float)key / (float)node->GetKey();
+	if (percentage > closest.second)
 	{
-		max = percentage;
-		closestNode = node;
+		closest.first = node;
+		closest.second = percentage;
 	}
 
-	return FindClosestMatch(node->GetNextRight(), idFind);
+	return FindClosestMatch(node->GetNextRight(), closest, key);
 }
 
 Node *BinaryTree::FindByName(Node *node, std::string findName)
 {
-	if (root != NULL && node != NULL)
+	if (node != NULL)
 	{
 		if (node->GetVessel()->GetName() == findName)
 		{
-			//stream.streamOut(node->getKey(), node->getVesselName(), node->getVesselPtr());
-			foundFlag = true;
+			return node;
 		}
 		FindByName(node->GetNextLeft(), findName);
 		FindByName(node->GetNextRight(), findName);
 	}
 	else
-		throw exception(ERRORMSG);
+	{
+		throw std::exception(ERRORMSG);
+	}
+	return nullptr;
 }
 
-void BinaryTree::InOrderPrint(Node *node)
+void BinaryTree::InOrderPrint(Node *node, std::function<void(Node*)> callback)
 {
-	if (root != NULL && node != NULL)
+	if (node != NULL)
 	{
-		InOrderPrint(node->GetNextLeft());
-		//stream.streamOut(node->GetKey(), node->GetVesselName(), node->GetVesselPtr());
-		InOrderPrint(node->GetNextRight());
-	}
-	else
-		throw exception(ERRORMSG);
-}
-
-void BinaryTree::PostOrderPrint(Node *node)
-{
-	if (root != NULL && node != NULL)
-	{
-		PostOrderPrint(node->GetNextRight());
-		//stream.streamOut(node->getKey(), node->getVesselName(), node->getVesselPtr());
-		PostOrderPrint(node->GetNextLeft());
-	}
-	else
-		throw exception(ERRORMSG);
-}
-
-void BinaryTree::NoOrderPrint(Node *node)
-{
-	if (root != NULL && node != NULL)
-	{
-		//stream.streamOut(node->getKey(), node->getVesselName(), node->getVesselPtr());
-		NoOrderPrint(node->GetNextLeft());
-		NoOrderPrint(node->GetNextRight());
-	}
-	else
-		throw exception(ERRORMSG);
-}
-
-void BinaryTree::PublicPrint(int printSelect)
-{
-	auto rootNode = FindRoot(root);
-
-	if (printSelect == 1)
-	{
-		InOrderPrint(rootNode);
-	}
-	else if (printSelect == 2)
-	{
-		PostOrderPrint(rootNode);
-	}		
-	else if (printSelect == 3)
-	{
-		NoOrderPrint(rootNode);
+		InOrderPrint(node->GetNextLeft(), callback);
+		callback(node);
+		InOrderPrint(node->GetNextRight(), callback);
 	}
 }
 
-void BinaryTree::FindVesselID(int idFind)
+void BinaryTree::PostOrderPrint(Node *node, std::function<void(Node*)> callback)
 {
-	auto _p = Find(FindRoot(root), idFind);
-	//stream.streamOut(_p->getKey(), _p->getVesselName(), _p->getVesselPtr());
+	if (node != NULL)
+	{
+		PostOrderPrint(node->GetNextRight(), callback);
+		callback(node);
+		PostOrderPrint(node->GetNextLeft(), callback);
+	}
 }
 
-void BinaryTree::FindVesselName(std::string findName)
+void BinaryTree::NoOrderPrint(Node *node, std::function<void(Node*)> callback)
 {
-	Node *_p = FindByName(FindRoot(root), findName);
-
-	if ((_p == NULL) && (foundFlag == false)) // _p will be returned as NULL because of recursion
-		throw exception(UNFOUND);
-	if ((_p == NULL) && (foundFlag == true))
-		foundFlag = false;
-}
-
-void BinaryTree::Hydrophone(int idFind)
-{
-	Node* _p = FindClosestMatch(FindRoot(root), idFind);
-	//stream.streamOut(_p->getKey(), _p->getVesselName(), _p->getVesselPtr()); //to catch if the hydrophone hits the nail on the head
+	if (node != NULL)
+	{
+		callback(node);
+		NoOrderPrint(node->GetNextLeft(), callback);
+		NoOrderPrint(node->GetNextRight(), callback);
+	}
 }
 
 Node *BinaryTree::Sucessor(Node *node)
@@ -249,7 +225,7 @@ Node *BinaryTree::Sucessor(Node *node)
 	return temp2;
 }
 
-void BinaryTree::DeleteCurrent(int selectID)
+void BinaryTree::DeleteNode(int selectID)
 {
 	Node *node;
 	Node *y;
@@ -268,9 +244,9 @@ void BinaryTree::DeleteCurrent(int selectID)
 			if (node->GetParent() == NULL)
 			{
 				rootNode = NULL;
-				element--;
+				totalElements--;
 				delete node;
-				throw exception(EMPTY); // might aswell jump out now :P
+				throw std::exception(EMPTY); // might aswell jump out now :P
 			}
 			if (node == (node->GetParent()->GetNextRight()))
 				y->SetNextRight(NULL);
@@ -455,16 +431,12 @@ void BinaryTree::DeleteCurrent(int selectID)
 			//cannot balance internal nodes
 		}
 
-		element--;
+		totalElements--;
 
 		delete node;
 	}
 }
 
-void BinaryTree::DeletePublic(int selectID)
-{
-	DeleteCurrent(selectID);
-}
 
 //red black Implementations
 Node *BinaryTree::GrandParent(Node *node)
@@ -702,15 +674,10 @@ void BinaryTree::DeleteCase6(Node *node)
 	}
 }
 
-Node *BinaryTree::FindRoot(Node *node)
+Node* BinaryTree::FindRoot(Node* node)
 {
-	while (true)
-	{
-		if (node->GetParent() != NULL)
-			node = node->GetParent();
-		else
-			break;
+	if (node != nullptr && node->GetParent() != nullptr) {
+		return FindRoot(node->GetParent());
 	}
-
 	return node;
 }

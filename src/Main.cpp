@@ -17,12 +17,12 @@ int main()
 	auto lib = std::make_unique<Library>(std::make_shared<BinaryTree>());
 	std::map<int, std::pair<std::string, std::function<void(void)>>> options{
 		{1, std::make_pair("Add Vessel to System", [&lib](void) -> void { lib->InsertVessel(); })},
-		{2, std::make_pair("No. Vessels In System", [&lib](void) -> void { lib->SizeOfList(); })},
+		{2, std::make_pair("No. Vessels In System", [&lib](void) -> void { lib->Size(); })},
 		{3, std::make_pair("Edit Vessel in System", [&lib](void) -> void { lib->SelectEditVessel(); })},
 		{4, std::make_pair("Print System", [&lib](void) -> void { lib->PrintVessels(); })},
 		{5, std::make_pair("Get Vessel from System", [&lib](void) -> void { lib->GetVessel(); })},
 		{6, std::make_pair("Delete Vessel from System", [&lib](void) -> void { lib->DeleteVessel(); })},
-		{7, std::make_pair("Simulate Hydrophone", [&lib](void) -> void { lib->HydrophoneSim(); })}
+		{7, std::make_pair("Simulate Hydrophone", [&lib](void) -> void { lib->Hydrophone(); })}
 	};
 
 	srand((unsigned)time(NULL));

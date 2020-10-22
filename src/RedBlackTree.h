@@ -1,6 +1,7 @@
 #pragma once
 #include <exception>
 #include <string>
+#include <functional>
 
 #define ERRORMSG "No Elements"
 #define UNFOUND "Not Found"
@@ -16,17 +17,24 @@ class BinaryTree
 {
 public:
 	BinaryTree();
-	void Insert(int keyGen, BaseVessel* vesselPtr); //public version
-	void EditNode(int key, BaseVessel* vesselPtr);
-	void PublicPrint(int printSelect);//public function
-	void FindVesselID(int idFind);
-	void FindVesselName(std::string findName);
-	void Hydrophone(int idFind);
-	int Size();
-	void DeletePublic(int selectID);
 
+	enum class PRINTMODE {
+		ASC,
+		DESC,
+		NON
+	};
+
+	void Insert(int key, BaseVessel* vessel); 
+	void Delete(int key);
+	void Print(PRINTMODE option, std::function<void(Node*)> callback);
+	void EditNode(int key, BaseVessel* vessel);
+	Node* FindVessel(int key);
+	Node* FindVessel(std::string name);
+	std::pair<Node*, float> FindClosest(int key);
+	int Size();
+	
 private:
-	void InsertNode(Node* node, int keyGen, BaseVessel* vesselPtr); //private function
+	void InsertNode(Node* node, int key, BaseVessel* vessel); //private function
 	//Insertion Cases
 	void InsertCase1(Node* node);
 	void InsertCase2(Node* node);
@@ -34,7 +42,7 @@ private:
 	void InsertCase4(Node* node);
 	void InsertCase5(Node* node);
 
-	void DeleteCurrent(int selectID);
+	void DeleteNode(int key);
 	//deletion cases
 	void DeleteCase1(Node* node);
 	void DeleteCase2(Node* node);
@@ -54,19 +62,14 @@ private:
 	Node* Sucessor(Node* node);
 
 	Node* FindRoot(Node* node);
-	Node* Find(Node* node, int idFind);
-	Node* FindByName(Node* node, std::string findName);
-	Node* FindClosestMatch(Node* node, int idFind);
+	Node* Find(Node* node, int key);
+	Node* FindByName(Node* node, std::string name);
+	std::pair<Node*, float> FindClosestMatch(Node* node, std::pair<Node*, float> closest, int key);
 
-	void InOrderPrint(Node* node);
-	void PostOrderPrint(Node* node);
-	void NoOrderPrint(Node* node);
+	void InOrderPrint(Node* node, std::function<void(Node*)> callback);
+	void PostOrderPrint(Node* node, std::function<void(Node*)> callback);
+	void NoOrderPrint(Node* node, std::function<void(Node*)> callback);
 private:
-	int element;
-	double percentageP1; //calculating percentage
-	double percentage;
-	double max; // for closest matcH
-	Node* root; //first node pointer
-	Node* closestNode; //closest node used in hydrophone
-	bool foundFlag;
+	Node* root;
+	int totalElements;
 };

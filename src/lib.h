@@ -2,6 +2,7 @@
 
 #include <string>
 #include <memory>
+#include <map>
 
 class Node;
 class BaseVessel;
@@ -16,16 +17,22 @@ public:
 	void DeleteVessel() const;
 	void GetVessel() const;
 	void SelectEditVessel() const;
-	void SizeOfList() const;
+	void Size() const;
 	void PrintVessels() const;
-	void HydrophoneSim() const;
+	void Hydrophone() const;
 	void EndGraceful() const;
 private: 
-	void StreamOut(int key, std::string vesselName, BaseVessel* vesselPtr) const;
-	BaseVessel* FillVesselPtr() const;
-	std::string SetName() const;
+
+	template<class KEY, class OPTION, class DATA>
+	void PrintOptions(std::string title, std::map<KEY, std::pair<OPTION, DATA>> options) const;
+
+	template<class KEY, class OPTION, class DATA>
+	DATA MakeSelection(std::map<KEY, std::pair<OPTION, DATA>> options) const;
+
+	BaseVessel* FillVessel() const;
+	void StreamOut(int key, BaseVessel* vesselPtr) const;
 	int ValidateCin() const;
-	void Percent(Node* node, double percentage) const;
+	void StreamPercent(std::pair<Node*, float> closest) const;
 
 private:
 	std::shared_ptr<BinaryTree> tree;
