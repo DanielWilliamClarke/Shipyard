@@ -5,6 +5,7 @@
 
 #include "lib.h"
 #include "RedBlackTree.h"
+#include "RedBlackTreeAlgorithm.h"
 
 class ExitException : public std::exception
 {
@@ -23,7 +24,10 @@ private:
 
 int main()
 {
-	auto lib = std::make_unique<Library>(std::make_shared<BinaryTree>());
+	auto lib = std::make_unique<Library>(
+		std::make_shared<BinaryTree>(
+			std::make_shared<RedBlackTreeAlgorithm>()));
+
 	std::map<int, std::pair<std::string, std::function<void(void)>>> options{
 		{1, std::make_pair("Add Vessel to System", [&lib](void) -> void { lib->InsertVessel(); })},
 		{2, std::make_pair("No. Vessels In System", [&lib](void) -> void { lib->Size(); })},
