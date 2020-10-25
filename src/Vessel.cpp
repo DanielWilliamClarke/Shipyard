@@ -22,6 +22,22 @@ BaseVessel::BaseVessel(std::istream& inStream)
 	inStream >> crewCompliment;
 }
 
+BaseVessel::BaseVessel(
+	std::string name,
+	unsigned int speed,
+	unsigned int length,
+	unsigned int maxRange,
+	unsigned int displacement,
+	unsigned int crewCompliment)
+	: name(name),
+	speed(speed), 
+	length(length),
+	maxRange(maxRange),
+	displacement(displacement),
+	crewCompliment(crewCompliment)
+{
+}
+
 void BaseVessel::Display(std::ostream& outStream) const
 {
 	outStream << std::endl
@@ -51,6 +67,19 @@ SurfaceVessel::SurfaceVessel(std::istream& inStream)
 	inStream >> numHelicopter;
 }
 
+SurfaceVessel::SurfaceVessel(
+	std::string name,
+	unsigned int speed,
+	unsigned int length,
+	unsigned int maxRange,
+	unsigned int displacement,
+	unsigned int crewCompliment,
+	unsigned int numHelicopter) 
+	: BaseVessel{ name, speed, length, maxRange, displacement, crewCompliment },
+		numHelicopter(numHelicopter)
+{
+}
+
 void SurfaceVessel::Display(std::ostream& outStream) const
 {
 	BaseVessel::Display(outStream);
@@ -64,6 +93,20 @@ AircraftCarrier::AircraftCarrier(std::istream& inStream)
 	std::cout << "Enter No. Aircraft: " << std::endl;
 	std::cout << ">";
 	inStream >> numAircraft;
+}
+
+AircraftCarrier::AircraftCarrier(
+	std::string name,
+	unsigned int speed,
+	unsigned int length,
+	unsigned int maxRange,
+	unsigned int displacement,
+	unsigned int crewCompliment,
+	unsigned int numHelicopter,
+	unsigned int numAircraft)
+	: SurfaceVessel{ name, speed, length, maxRange, displacement, crewCompliment, numHelicopter },
+		numAircraft(numAircraft)
+{
 }
 
 void AircraftCarrier::Display(std::ostream& outStream) const
@@ -81,6 +124,20 @@ Destroyer::Destroyer(std::istream& inStream)
 	inStream >> wepSystem;
 }
 
+Destroyer::Destroyer(
+	std::string name,
+	unsigned int speed,
+	unsigned int length,
+	unsigned int maxRange,
+	unsigned int displacement,
+	unsigned int crewCompliment,
+	unsigned int numHelicopter,
+	std::string wepSystem)
+	: SurfaceVessel{ name, speed, length, maxRange, displacement, crewCompliment, numHelicopter },
+	wepSystem(wepSystem)
+{
+}
+
 void Destroyer::Display(std::ostream& outStream) const
 {
 	SurfaceVessel::Display(outStream);
@@ -94,6 +151,20 @@ FleetAuxiliary::FleetAuxiliary(std::istream& inStream)
 	std::cout << "Enter Deck Space (Metres): " << std::endl;
 	std::cout << ">";
 	inStream >> deckSpace;
+}
+
+FleetAuxiliary::FleetAuxiliary(
+	std::string name,
+	unsigned int speed,
+	unsigned int length,
+	unsigned int maxRange,
+	unsigned int displacement,
+	unsigned int crewCompliment,
+	unsigned int numHelicopter,
+	unsigned int deckSpace) 
+	: SurfaceVessel{ name, speed, length, maxRange, displacement, crewCompliment, numHelicopter },
+	deckSpace(deckSpace)
+{
 }
 
 void FleetAuxiliary::Display(std::ostream& outStream) const
@@ -111,6 +182,21 @@ Tanker::Tanker(std::istream& inStream)
 	inStream >> capacity;
 }
 
+Tanker::Tanker(
+	std::string name,
+	unsigned int speed,
+	unsigned int length,
+	unsigned int maxRange,
+	unsigned int displacement,
+	unsigned int crewCompliment,
+	unsigned int numHelicopter,
+	unsigned int deckSpace,
+	unsigned int capacity)
+	: FleetAuxiliary{ name, speed, length, maxRange, displacement, crewCompliment, numHelicopter, deckSpace },
+	capacity(capacity)
+{
+}
+
 void Tanker::Display(std::ostream& outStream) const
 {
 	FleetAuxiliary::Display(outStream);
@@ -124,6 +210,21 @@ LandingPlat::LandingPlat(std::istream& inStream)
 	std::cout << "Enter Capacity (Cubic Metres): " << std::endl;
 	std::cout << ">";
 	inStream >> capacity;
+}
+
+LandingPlat::LandingPlat(
+	std::string name,
+	unsigned int speed,
+	unsigned int length,
+	unsigned int maxRange,
+	unsigned int displacement,
+	unsigned int crewCompliment,
+	unsigned int numHelicopter,
+	unsigned int deckSpace,
+	unsigned int capacity)
+	: FleetAuxiliary{ name, speed, length, maxRange, displacement, crewCompliment, numHelicopter, deckSpace },
+	capacity(capacity)
+{
 }
 
 void LandingPlat::Display(std::ostream& outStream) const
@@ -147,6 +248,21 @@ Submarine::Submarine(std::istream& inStream)
 	inStream >> subDisplacement;
 }
 
+Submarine::Submarine(
+	std::string name,
+	unsigned int speed,
+	unsigned int length,
+	unsigned int maxRange,
+	unsigned int displacement,
+	unsigned int crewCompliment,
+	unsigned int maxDiveDepth,
+	unsigned int maxSubSpeed,
+	unsigned int subDisplacement)
+	: BaseVessel{ name, speed, length, maxRange, displacement, crewCompliment },
+	maxDiveDepth(maxDiveDepth), maxSubSpeed(maxSubSpeed), subDisplacement(subDisplacement)
+{
+}
+
 void Submarine::Display(std::ostream& outStream) const
 {
 	BaseVessel::Display(outStream);
@@ -164,6 +280,22 @@ BallisticSub::BallisticSub(std::istream& inStream)
 	inStream >> numSLBM;
 }
 
+BallisticSub::BallisticSub(
+	std::string name,
+	unsigned int speed,
+	unsigned int length,
+	unsigned int maxRange,
+	unsigned int displacement,
+	unsigned int crewCompliment,
+	unsigned int maxDiveDepth,
+	unsigned int maxSubSpeed,
+	unsigned int subDisplacement,
+	unsigned int numSLBM)
+	: Submarine{ name, speed, length, maxRange, displacement, crewCompliment, maxDiveDepth, maxSubSpeed, subDisplacement },
+	numSLBM(numSLBM)
+{
+}
+
 void BallisticSub::Display(std::ostream& outStream) const
 {
 	Submarine::Display(outStream);
@@ -177,6 +309,22 @@ AttackSub::AttackSub(std::istream& inStream)
 	std::cout << "Enter No. Torpedos: " << std::endl;
 	std::cout << ">";
 	inStream >> numTorpedos;
+}
+
+AttackSub::AttackSub(
+	std::string name,
+	unsigned int speed,
+	unsigned int length,
+	unsigned int maxRange,
+	unsigned int displacement,
+	unsigned int crewCompliment,
+	unsigned int maxDiveDepth,
+	unsigned int maxSubSpeed,
+	unsigned int subDisplacement,
+	unsigned int numTorpedos)
+	: Submarine{ name, speed, length, maxRange, displacement, crewCompliment, maxDiveDepth, maxSubSpeed, subDisplacement },
+	numTorpedos(numTorpedos)
+{
 }
 
 void AttackSub::Display(std::ostream& outStream) const

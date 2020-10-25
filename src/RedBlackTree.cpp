@@ -17,7 +17,6 @@ BinaryTree::BinaryTree(std::shared_ptr<ITreeAlgorithm> balancer)
 }
 
 // Public
-
 void BinaryTree::Insert(int key, Node* node)
 {
 	totalElements++;
