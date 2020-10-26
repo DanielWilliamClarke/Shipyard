@@ -1,7 +1,7 @@
 cmake_minimum_required (VERSION 3.8)
 
-project(Shipyard
-)
+project(Shipyard)
+
 # Enable debug symbols by default
 # must be done before project() statement
 if(NOT CMAKE_BUILD_TYPE)
@@ -20,4 +20,6 @@ conan_basic_setup(TARGETS)
 include_directories(src)
 add_subdirectory (src)
 # Add tests
-add_subdirectory (test)
+if(CMAKE_BUILD_TYPE EQUAL Debug)
+  add_subdirectory (test)
+endif()

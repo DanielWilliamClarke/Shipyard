@@ -5,11 +5,10 @@ class BaseVessel;
 class Node
 {
 public:
-	Node(int key, BaseVessel* vessel, Node* parent = nullptr);
+	Node(BaseVessel* vessel, Node* parent = nullptr);
 	virtual ~Node() = default;
 
 	static int GenerateKey();
-	int GetKey() const;
 	BaseVessel* GetVessel() const;
 	void SetVessel(BaseVessel* vessel);
 	void SetParent(Node *parent);
@@ -21,8 +20,8 @@ public:
 	void SetColour(bool Colour);
 	bool GetColour() const;
 
+	unsigned int MaxDepth() const;
 private:
-	int key; //ship signature
 	BaseVessel *vessel; //allows data to be put in tree regardless of type
 	Node *parent; //pointer to node parent
 	Node *left; //pointer to the next left node

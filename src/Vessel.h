@@ -8,8 +8,9 @@
 class BaseVessel
 {
 public:
-	BaseVessel(std::istream& inStream);
+	BaseVessel(unsigned int signature, std::istream& inStream);
 	BaseVessel(
+		unsigned int signature,
 		std::string name,
 		unsigned int speed,
 		unsigned int length,
@@ -19,7 +20,9 @@ public:
 
 	virtual void Display(std::ostream& outStream) const;
 	const std::string GetName() const;
+	const unsigned int GetSignature() const;
 protected:
+	unsigned int signature;
 	std::string name;
 	unsigned int speed; //knots
 	unsigned int length; //metres
@@ -33,8 +36,9 @@ protected:
 class SurfaceVessel : public BaseVessel
 {
 public:
-	SurfaceVessel(std::istream& inStream);
+	SurfaceVessel(unsigned int signature, std::istream& inStream);
 	SurfaceVessel(
+		unsigned int signature,
 		std::string name,
 		unsigned int speed,
 		unsigned int length,
@@ -50,8 +54,9 @@ protected:
 class AircraftCarrier : public SurfaceVessel
 {
 public:
-	AircraftCarrier(std::istream& inStream);
+	AircraftCarrier(unsigned int signature, std::istream& inStream);
 	AircraftCarrier(
+		unsigned int signature,
 		std::string name,
 		unsigned int speed,
 		unsigned int length,
@@ -68,8 +73,9 @@ protected:
 class Destroyer : public SurfaceVessel
 {
 public:
-	Destroyer(std::istream& inStream);
+	Destroyer(unsigned int signature, std::istream& inStream);
 	Destroyer(
+		unsigned int signature,
 		std::string name,
 		unsigned int speed,
 		unsigned int length,
@@ -86,8 +92,9 @@ protected:
 class FleetAuxiliary : public SurfaceVessel
 {
 public:
-	FleetAuxiliary(std::istream& inStream);
+	FleetAuxiliary(unsigned int signature, std::istream& inStream);
 	FleetAuxiliary(
+		unsigned int signature,
 		std::string name,
 		unsigned int speed,
 		unsigned int length,
@@ -104,8 +111,9 @@ protected:
 class Tanker : public FleetAuxiliary
 {
 public:
-	Tanker(std::istream& inStream);
+	Tanker(unsigned int signature, std::istream& inStream);
 	Tanker(
+		unsigned int signature,
 		std::string name,
 		unsigned int speed,
 		unsigned int length,
@@ -123,8 +131,9 @@ protected:
 class LandingPlat : public FleetAuxiliary
 {
 public:
-	LandingPlat(std::istream& inStream);
+	LandingPlat(unsigned int signature, std::istream& inStream);
 	LandingPlat(
+		unsigned int signature,
 		std::string name,
 		unsigned int speed,
 		unsigned int length,
@@ -142,13 +151,10 @@ protected:
 //Submarines
 class Submarine : public BaseVessel
 {
-protected:
-	unsigned int maxDiveDepth; //metres
-	unsigned int maxSubSpeed; //knots
-	unsigned int subDisplacement; //tons
 public:
-	Submarine(std::istream & inStream);
+	Submarine(unsigned int signature, std::istream& inStream);
 	Submarine(
+		unsigned int signature,
 		std::string name,
 		unsigned int speed,
 		unsigned int length,
@@ -158,14 +164,19 @@ public:
 		unsigned int maxDiveDepth,
 		unsigned int maxSubSpeed,
 		unsigned int subDisplacement);
-	virtual void Display(std::ostream & outStream) const override;
+	virtual void Display(std::ostream& outStream) const override;
+protected:
+	unsigned int maxDiveDepth; //metres
+	unsigned int maxSubSpeed; //knots
+	unsigned int subDisplacement; //tons
 };
 
 class BallisticSub : public Submarine
 {
 public:
-	BallisticSub(std::istream& inStream);
+	BallisticSub(unsigned int signature, std::istream& inStream);
 	BallisticSub(
+		unsigned int signature,
 		std::string name,
 		unsigned int speed,
 		unsigned int length,
@@ -184,8 +195,9 @@ protected:
 class AttackSub : public Submarine
 {
 public:
-	AttackSub(std::istream& inStream);
+	AttackSub(unsigned int signature, std::istream& inStream);
 	AttackSub(
+		unsigned int signature,
 		std::string name,
 		unsigned int speed,
 		unsigned int length,

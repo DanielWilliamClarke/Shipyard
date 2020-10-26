@@ -1,8 +1,8 @@
 #include "Node.h"
 #include "Vessel.h"
 
-Node::Node(int key, BaseVessel* vessel, Node* parent)
-	: key(key), vessel(vessel), parent(parent), left(nullptr), right(nullptr), colour(false)
+Node::Node(BaseVessel* vessel, Node* parent)
+	: vessel(vessel), parent(parent), left(nullptr), right(nullptr), colour(false)
 {
 }
 
@@ -10,11 +10,6 @@ Node::Node(int key, BaseVessel* vessel, Node* parent)
 int Node::GenerateKey()
 {
 	return rand() % 9999;
-}
-
-int Node::GetKey() const
-{
-	return key;
 }
 
 void Node::SetVessel(BaseVessel* v)
@@ -65,4 +60,11 @@ void Node::SetColour(bool c)
 bool Node::GetColour() const
 {
 	return colour;
+}
+
+unsigned int Node::MaxDepth() const
+{
+	const int leftDepth = left ? left->MaxDepth() : 0;
+	const int rightDepth = right ? right->MaxDepth() : 0;
+	return (leftDepth > rightDepth ? leftDepth : rightDepth) + 1;
 }

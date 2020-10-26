@@ -17,7 +17,7 @@ BinaryTree::BinaryTree(std::shared_ptr<ITreeAlgorithm> balancer)
 }
 
 // Public
-void BinaryTree::Insert(int key, Node* node)
+void BinaryTree::Insert(Node* node)
 {
 	totalElements++;
 	root != nullptr ?
@@ -25,7 +25,7 @@ void BinaryTree::Insert(int key, Node* node)
 		root = node;
 }
 
-void BinaryTree::Delete(int selectID)
+void BinaryTree::Delete(unsigned int selectID)
 {
 	DeleteNode(selectID);
 }
@@ -39,7 +39,7 @@ void BinaryTree::Traverse(BinaryTree::TRAVERSAL_ALGO algo, std::function<void(No
 	} [algo] (FindRoot(root));
 }
 
-Node* BinaryTree::FindVessel(int idFind) const
+Node* BinaryTree::FindVessel(unsigned int idFind) const
 {
 	return Find(FindRoot(root), idFind);
 }
@@ -59,16 +59,21 @@ int BinaryTree::Size() const
 	return totalElements;
 }
 
+Node* BinaryTree::GetRoot() const
+{
+	return root;
+}
+
 // Private
 
 void BinaryTree::InsertNode(Node* node, Node* newNode)
 {
-	if (newNode->GetKey() == node->GetKey())
+	if (newNode->GetVessel()->GetSignature() == node->GetVessel()->GetSignature())
 	{
 		throw std::exception(DUPLICATE);
 	}		
 
-	if (newNode->GetKey() < node->GetKey()) //compare key in tree
+	if (newNode->GetVessel()->GetSignature() < node->GetVessel()->GetSignature()) //compare key in tree
 	{
 		if (node->GetNextLeft() != nullptr)
 		{
@@ -77,7 +82,6 @@ void BinaryTree::InsertNode(Node* node, Node* newNode)
 		else
 		{
 			node->SetNextLeft(newNode);
-			totalElements++;
 		}
 	}
 	else
@@ -89,7 +93,6 @@ void BinaryTree::InsertNode(Node* node, Node* newNode)
 		else
 		{
 			node->SetNextRight(newNode);
-			totalElements++;
 		}
 	}
 
@@ -106,40 +109,40 @@ Node* BinaryTree::FindRoot(Node* node) const
 	return node;
 }
 
-Node *BinaryTree::Find(Node *node, int key) const
+Node *BinaryTree::Find(Node *node, unsigned int key) const
 {
 	if (node == nullptr)
 	{
 		throw std::exception(UNFOUND);
 	}
 	
-	if (node->GetKey() == key)
+	if (node->GetVessel()->GetSignature() == key)
 	{
 		return node;
 	}
 
-	if (key < node->GetKey())
+	if (key < node->GetVessel()->GetSignature())
 	{
 		return Find(node->GetNextLeft(), key);
 	}
 	return Find(node->GetNextRight(), key);
 }
 
-std::pair<Node*, float> BinaryTree::FindClosestMatch(Node *node, std::pair<Node*, float> closest, int key) const
+std::pair<Node*, float> BinaryTree::FindClosestMatch(Node *node, std::pair<Node*, float> closest, unsigned int key) const
 {
 	if (node == nullptr)
 	{
 		return closest;
 	}
 
-	if (node->GetKey() == key)
+	if (node->GetVessel()->GetSignature() == key)
 	{
 		return std::make_pair(node, 1.0f);
 	}
 
-	if (key < node->GetKey())
+	if (key < node->GetVessel()->GetSignature())
 	{
-		auto percentage = (float)node->GetKey() / (float)key;
+		auto percentage = (float)node->GetVessel()->GetSignature() / (float)key;
 		if (percentage > closest.second)
 		{
 			closest.first = node;
@@ -149,7 +152,7 @@ std::pair<Node*, float> BinaryTree::FindClosestMatch(Node *node, std::pair<Node*
 		return FindClosestMatch(node->GetNextLeft(), closest, key);
 	}
 
-	auto percentage = (float)key / (float)node->GetKey();
+	auto percentage = (float)key / (float)node->GetVessel()->GetSignature();
 	if (percentage > closest.second)
 	{
 		closest.first = node;
@@ -212,7 +215,7 @@ void BinaryTree::DeleteNode(int key)
 	//need to start with a search so
 	auto node = Find(FindRoot(root), key);
 
-	if (node->GetKey() == key)
+	if (node->GetVessel()->GetSignature() == key)
 	{
 		// when node is a leaf only
 		if ((node->GetNextLeft() == nullptr) && (node->GetNextRight() == nullptr))

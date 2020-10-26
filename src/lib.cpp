@@ -4,14 +4,16 @@
 #include <map>
 #include <functional>
 #include <algorithm>
+#include <random>
 
 #include "lib.h"
 #include "RedBlackTree.h"
 #include "Node.h"
 #include "Vessel.h"
+#include "TreeVisualiser.h"
 
-Library::Library(std::shared_ptr<BinaryTree> tree) 
-	: tree(tree)
+Library::Library(std::shared_ptr<BinaryTree> tree, std::shared_ptr<TreeVisualiser> viz)
+	: tree(tree), viz(viz)
 {}
 
 void Library::InsertVessel() const
@@ -22,10 +24,10 @@ void Library::InsertVessel() const
 	std::cout << "-Insert Vessel-" << std::endl
 		<< std::endl << "Vessel's Acoustic Signature: " << signature << std::endl;
 
-	this->tree->Insert(signature, new Node(signature,FillVessel(), nullptr));
+	this->tree->Insert(new Node(FillVessel(), nullptr));
 
 	auto node = this->tree->FindVessel(signature);
-	StreamOut(node->GetKey(), node->GetVessel());
+	StreamOut(node->GetVessel());
 
 	EndGraceful();
 }
@@ -65,9 +67,15 @@ void Library::PrintVessels() const
 	this->tree->Traverse(
 		MakeSelection<int, std::string, BinaryTree::TRAVERSAL_ALGO>(options),
 		[=](Node* node) {
-			StreamOut(node->GetKey(), node->GetVessel());
+			StreamOut(node->GetVessel());
 		});
 
+	EndGraceful();
+}
+
+void Library::VisualiseTree() const
+{
+	this->viz->Display(this->tree->GetRoot(), std::cout);
 	EndGraceful();
 }
 
@@ -109,6 +117,43 @@ void Library::Hydrophone() const
 	EndGraceful();
 }
 
+void Library::GenerateRandomTree() const
+{
+	std::cout << "Please Enter Total Number of Vessels" << std::endl;
+	std::cout << ">";
+	auto totalVessels = ValidateCin();
+
+	std::random_device device;
+	std::mt19937 source(device());
+
+	const int min = 0, max = 1000000;
+
+	std::uniform_int_distribution<unsigned int> dist(min, max);
+
+	// This is gross will refactor
+	std::vector<std::function<BaseVessel* (unsigned int signature)>> vesselTypes {
+		{ [&](unsigned int signature) { return new AircraftCarrier(signature, "Aircraft Carrier-" + std::to_string(signature), dist(source), dist(source), dist(source), dist(source), dist(source), dist(source), dist(source)); } },
+
+		{ [&](unsigned int signature) { return new Destroyer(signature, "Destroyer-" + std::to_string(signature), dist(source), dist(source), dist(source), dist(source), dist(source), dist(source), "Bombs"); } },
+
+		{ [&](unsigned int signature) { return new Tanker(signature, "Tanker-" + std::to_string(signature), dist(source), dist(source), dist(source), dist(source), dist(source), dist(source), dist(source), dist(source)); } },
+
+		{ [&](unsigned int signature) { return new LandingPlat(signature, "LandingPlat-" + std::to_string(signature), dist(source), dist(source), dist(source), dist(source), dist(source), dist(source), dist(source), dist(source)); } },
+
+		{ [&](unsigned int signature) { return new BallisticSub(signature, "BallisticSub-" + std::to_string(signature), dist(source), dist(source), dist(source), dist(source), dist(source), dist(source), dist(source), dist(source), dist(source)); } },
+
+		{ [&](unsigned int signature) { return new AttackSub(signature, "AttackSub-" + std::to_string(signature), dist(source), dist(source), dist(source), dist(source), dist(source), dist(source), dist(source), dist(source), dist(source)); } }
+	};
+
+	std::uniform_int_distribution<size_t> vesselDist(0, vesselTypes.size() - 1);
+	for (unsigned int index = 0; index < totalVessels; index++) 
+	{
+		this->tree->Insert(
+			new Node(
+				vesselTypes.at(vesselDist(source))(dist(source))));
+	}
+}
+
 void Library::GetVessel() const
 {
 	system("CLS");
@@ -120,14 +165,14 @@ void Library::GetVessel() const
 		{1, std::make_pair("By Signature", [&]() {
 			std::cout << "Please Enter an ID:" << std::endl << ">";
 			auto node = this->tree->FindVessel(ValidateCin());
-			StreamOut(node->GetKey(), node->GetVessel());
+			StreamOut(node->GetVessel());
 		})},
 		{2, std::make_pair("By Name", [&]() {
 			std::cout << "Please Enter a Name:" << std::endl << ">";
 			auto searchName = std::string("");
 			std::cin >> searchName;
 			auto node = this->tree->FindVessel(searchName);
-			StreamOut(node->GetKey(), node->GetVessel());
+			StreamOut(node->GetVessel());
 		})}
 	};
 
@@ -146,13 +191,15 @@ void Library::GetVessel() const
 
 BaseVessel* Library::FillVessel() const
 {
+	auto signature = Node::GenerateKey();
+
 	std::map<int, std::pair<std::string, std::function<BaseVessel*(void)>>> options{
-		{1, std::make_pair("AirCraft Carrier", [&]() { return new AircraftCarrier(std::cin); })},
-		{2, std::make_pair("Destroyer", [&]() { return new Destroyer(std::cin); })},
-		{3, std::make_pair("Tanker", [&]() { return new Tanker(std::cin); })},
-		{4, std::make_pair("Landing Platform Dock", [&]() { return new LandingPlat(std::cin); })},
-		{5, std::make_pair("Ballistic Submarine", [&]() { return new BallisticSub(std::cin); })},
-		{6, std::make_pair("Attack Submarine", [&]() { return new AttackSub(std::cin); })}
+		{1, std::make_pair("AirCraft Carrier", [&]() { return new AircraftCarrier(signature, std::cin); })},
+		{2, std::make_pair("Destroyer", [&]() { return new Destroyer(signature, std::cin); })},
+		{3, std::make_pair("Tanker", [&]() { return new Tanker(signature, std::cin); })},
+		{4, std::make_pair("Landing Platform Dock", [&]() { return new LandingPlat(signature, std::cin); })},
+		{5, std::make_pair("Ballistic Submarine", [&]() { return new BallisticSub(signature, std::cin); })},
+		{6, std::make_pair("Attack Submarine", [&]() { return new AttackSub(signature, std::cin); })}
 	};
 
 	try
@@ -199,26 +246,21 @@ DATA Library::MakeSelection(std::map<KEY, std::pair<OPTION, DATA>> options) cons
 	return options[selection].second;
 }
 
-void Library::StreamOut(int signature, BaseVessel* vessel) const
+void Library::StreamOut(BaseVessel* vessel) const
 {
 	std::cout << std::endl
 		<< "-Vessel Data-" << std::endl
 		<< std::endl;
-
-	std::cout << "Acoustic Signature: " << signature << std::endl;
-
 	vessel->Display(std::cout);
-
-	std::cout << std::endl;
 }
 
 void Library::StreamPercent(std::pair<Node*, float> closest) const
 {
 	if (closest.first != nullptr && closest.second > 65)
 	{
-		std::cout << "Closest Match to: " << closest.first->GetKey() << " with " << std::setprecision(4) << closest.second << "%"
+		std::cout << "Closest Match to: " << closest.first->GetVessel()->GetSignature() << " with " << std::setprecision(4) << closest.second << "%"
 			<< std::endl << std::endl;
-		StreamOut(closest.first->GetKey(), closest.first->GetVessel());
+		StreamOut(closest.first->GetVessel());
 		return;
 	}
 

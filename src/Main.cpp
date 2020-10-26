@@ -6,6 +6,7 @@
 #include "lib.h"
 #include "RedBlackTree.h"
 #include "RedBlackTreeAlgorithm.h"
+#include "TreeVisualiser.h"
 
 class ExitException : public std::exception
 {
@@ -26,17 +27,20 @@ int main()
 {
 	auto lib = std::make_unique<Library>(
 		std::make_shared<BinaryTree>(
-			std::make_shared<RedBlackTreeAlgorithm>()));
+			std::make_shared<RedBlackTreeAlgorithm>()),
+			std::make_shared<TreeVisualiser>());
 
 	std::map<int, std::pair<std::string, std::function<void(void)>>> options{
 		{1, std::make_pair("Add Vessel to System", [&lib](void) -> void { lib->InsertVessel(); })},
-		{2, std::make_pair("No. Vessels In System", [&lib](void) -> void { lib->Size(); })},
-		{3, std::make_pair("Edit Vessel in System", [&lib](void) -> void { lib->SelectEditVessel(); })},
-		{4, std::make_pair("Print System", [&lib](void) -> void { lib->PrintVessels(); })},
-		{5, std::make_pair("Get Vessel from System", [&lib](void) -> void { lib->GetVessel(); })},
-		{6, std::make_pair("Delete Vessel from System", [&lib](void) -> void { lib->DeleteVessel(); })},
-		{7, std::make_pair("Simulate Hydrophone", [&lib](void) -> void { lib->Hydrophone(); })},
-		{8, std::make_pair("Exit", [=](void) -> void { throw ExitException("Goodbye!"); })}
+		{2, std::make_pair("Fill System", [&lib](void) -> void { lib->GenerateRandomTree(); })},
+		{3, std::make_pair("No. Vessels In System", [&lib](void) -> void { lib->Size(); })},
+		{4, std::make_pair("Edit Vessel in System", [&lib](void) -> void { lib->SelectEditVessel(); })},
+		{5, std::make_pair("Print System", [&lib](void) -> void { lib->PrintVessels(); })},
+		{6, std::make_pair("Visualise System", [&lib](void) -> void { lib->VisualiseTree(); })},
+		{7, std::make_pair("Get Vessel from System", [&lib](void) -> void { lib->GetVessel(); })},
+		{8, std::make_pair("Delete Vessel from System", [&lib](void) -> void { lib->DeleteVessel(); })},
+		{9, std::make_pair("Simulate Hydrophone", [&lib](void) -> void { lib->Hydrophone(); })},
+		{10, std::make_pair("Exit", [=](void) -> void { throw ExitException("Goodbye!"); })}
 	};
 
 	srand((unsigned)time(NULL));
