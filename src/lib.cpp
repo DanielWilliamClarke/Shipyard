@@ -10,10 +10,10 @@
 #include "RedBlackTree.h"
 #include "Node.h"
 #include "Vessel.h"
-#include "TreeVisualiser.h"
+#include "Vessel.h"
 
-Library::Library(std::shared_ptr<BinaryTree> tree, std::shared_ptr<TreeVisualiser> viz)
-	: tree(tree), viz(viz)
+Library::Library(std::shared_ptr<BinaryTree> tree)
+	: tree(tree)
 {}
 
 void Library::InsertVessel() const
@@ -70,12 +70,6 @@ void Library::PrintVessels() const
 			StreamOut(node->GetVessel());
 		});
 
-	EndGraceful();
-}
-
-void Library::VisualiseTree() const
-{
-	this->viz->Display(this->tree->GetRoot(), std::cout);
 	EndGraceful();
 }
 
@@ -146,7 +140,7 @@ void Library::GenerateRandomTree() const
 	};
 
 	std::uniform_int_distribution<size_t> vesselDist(0, vesselTypes.size() - 1);
-	for (unsigned int index = 0; index < totalVessels; index++) 
+	for (int index = 0; index < totalVessels; index++) 
 	{
 		this->tree->Insert(
 			new Node(

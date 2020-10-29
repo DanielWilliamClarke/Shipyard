@@ -7,12 +7,11 @@
 class Node;
 class BaseVessel;
 class BinaryTree;
-class TreeVisualiser;
 
 class Library
 {
 public:
-	Library(std::shared_ptr<BinaryTree> tree, std::shared_ptr<TreeVisualiser> viz);
+	Library(std::shared_ptr<BinaryTree> tree);
 
 	template<class KEY, class OPTION, class DATA>
 	void PrintOptions(std::string title, std::map<KEY, std::pair<OPTION, DATA>> options) const;
@@ -26,7 +25,6 @@ public:
 	void SelectEditVessel() const;
 	void Size() const;
 	void PrintVessels() const;
-	void VisualiseTree() const;
 	void Hydrophone() const;
 	void EndGraceful() const;
 
@@ -40,5 +38,4 @@ private:
 
 private:
 	std::shared_ptr<BinaryTree> tree;
-	std::shared_ptr<TreeVisualiser> viz;
 };
